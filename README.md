@@ -94,3 +94,5 @@ CREATE TABLE meeting (
 ## 文件存储路径
 image: ~/resources/image/*
 video: ~/resources/video/*
+
+## zyt hhh
