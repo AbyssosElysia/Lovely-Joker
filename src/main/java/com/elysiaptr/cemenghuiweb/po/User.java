@@ -15,11 +15,13 @@ public class User implements Serializable {
     private LocalDateTime time;
     private int role;
     private String remark;
+    private int domain;
+    private int is_admin;
     private int dept_id;
     private int post_id;
     private int company_id;
 
-    public User(int id, String username, String name, String password, long mobile, String gender, String email, int status, LocalDateTime time, int role, String remark, int dept_id, int post_id, int company_id) {
+    public User(int id, String username, String name, String password, long mobile, String gender, String email, int status, LocalDateTime time, int role, String remark, int is_admin,int domain,int dept_id, int post_id, int company_id) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -31,6 +33,8 @@ public class User implements Serializable {
         this.time = time;
         this.role = role;
         this.remark = remark;
+        this.is_admin=is_admin;
+        this.domain=domain;
         this.dept_id = dept_id;
         this.post_id = post_id;
         this.company_id = company_id;
@@ -124,6 +128,14 @@ public class User implements Serializable {
         this.remark = remark;
     }
 
+    public int getIs_admin() {return is_admin;}
+
+    public void setIs_admin(int is_admin) {this.is_admin = is_admin;}
+
+    public int getDomain() {return domain;}
+
+    public void setDomain(int domain) {this.domain = domain;}
+
     public int getDept_id() {
         return dept_id;
     }
@@ -162,9 +174,14 @@ public class User implements Serializable {
                 ", time=" + time +
                 ", role=" + role +
                 ", remark='" + remark + '\'' +
+                ", is_admin=" + is_admin +
+                ", domain=" + domain +
                 ", dept_id=" + dept_id +
                 ", post_id=" + post_id +
                 ", company_id=" + company_id +
                 '}';
     }
+
+
+
 }

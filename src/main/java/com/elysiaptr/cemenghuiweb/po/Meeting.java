@@ -11,7 +11,6 @@ public class Meeting implements Serializable {
     private String status;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private int userId;
 
     public Meeting(int id, String name, String content, String image, String status, LocalDateTime startTime, LocalDateTime endTime, int userId) {
         this.id = id;
@@ -21,7 +20,7 @@ public class Meeting implements Serializable {
         this.status = status;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.userId = userId;
+
     }
 
     public int getId() {
@@ -80,13 +79,7 @@ public class Meeting implements Serializable {
         this.endTime = endTime;
     }
 
-    public int getUserId() {
-        return userId;
-    }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     @Override
     public String toString() {
@@ -98,7 +91,6 @@ public class Meeting implements Serializable {
                 ", status='" + status + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", userId=" + userId +
                 '}';
     }
 }
