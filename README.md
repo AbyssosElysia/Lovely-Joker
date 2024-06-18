@@ -125,6 +125,7 @@ CREATE TABLE Meeting (
 CREATE TABLE MeetingUser (
     meeting_id INT UNSIGNED COMMENT '会议ID Meeting.id',
     user_id INT UNSIGNED COMMENT '用户ID User.id',
+    domain TINYINT NOT NULL DEFAULT 1 COMMENT '是否为管理者 0是1否',
     PRIMARY KEY (meeting_id, user_id)
 );
 
