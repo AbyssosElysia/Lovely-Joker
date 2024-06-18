@@ -1,5 +1,27 @@
 # Lovely-Joker
-## 数据库初始化文档
+
+## 使用指南
+
+### 环境配置
+
+- **jdk** 21.0.3
+- **Java** 17
+- **Spring Boot** 3.3.0
+
+### 组件
+
+- **包管理工具** Maven
+- **数据库** MySQL
+- **内存数据库** Redis
+
+### 数据库详情
+
+- **MySQL数据库名** cemenghui
+- **Redis数据库名** 1
+
+### 数据库初始化
+
+```sql
 -- 创建数据库
 CREATE DATABASE IF NOT EXISTS enterprise;
 USE enterprise;
@@ -90,7 +112,32 @@ CREATE TABLE meeting (
     content VARCHAR(4000) NOT NULL,
     founder VARCHAR(60) NOT NULL
 );
+```
+
+### Spring Boot依赖配置
+
+- 请在src/main/resources/目录下新建application.properties配置文件
+
+```properties
+spring.application.name=CeMengHuiWeb
+
+# MySQL
+spring.datasource.url=jdbc:mysql://localhost:yoursqlport(default:3306)/cemenghui
+spring.datasource.username=yourusername(default:root)
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# Redis
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+spring.data.redis.database=1
+```
 
 ## 文件存储路径
-image: ~/resources/image/*
-video: ~/resources/video/*
+
+- **image** ~/resources/image/*
+- **video** ~/resources/video/*
