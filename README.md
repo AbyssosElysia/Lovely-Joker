@@ -74,9 +74,9 @@ CREATE TABLE department (
     mobile CHAR(11),
     email VARCHAR(40) NOT NULL,
     status TINYINT NOT NULL,
-    father INT,
+    father_dept_id INT,
     time DATETIME NOT NULL,
-    FOREIGN KEY (father) REFERENCES department(id)
+    FOREIGN KEY (father_dept_id) REFERENCES department(id)
 );
 
 -- 创建资讯表

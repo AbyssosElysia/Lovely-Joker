@@ -8,18 +8,18 @@ public class Meeting implements Serializable {
     private String name;
     private String content;
     private String image;
-    private String status;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private int status;
+    private LocalDateTime start_time;
+    private LocalDateTime end_time;
 
-    public Meeting(int id, String name, String content, String image, String status, LocalDateTime startTime, LocalDateTime endTime, int userId) {
+    public Meeting(int id, String name, String content, String image, int status, LocalDateTime startTime, LocalDateTime end_time) {
         this.id = id;
         this.name = name;
         this.content = content;
         this.image = image;
         this.status = status;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.start_time = startTime;
+        this.end_time = end_time;
 
     }
 
@@ -51,32 +51,30 @@ public class Meeting implements Serializable {
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+    public void setImage(String image) {this.image = image;}
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return start_time;
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+        this.start_time = startTime;
     }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
+    public LocalDateTime getEnd_time() {
+        return end_time;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+    public void setEnd_time(LocalDateTime end_time) {
+        this.end_time = end_time;
     }
 
 
@@ -89,8 +87,8 @@ public class Meeting implements Serializable {
                 ", content='" + content + '\'' +
                 ", image='" + image + '\'' +
                 ", status='" + status + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                ", startTime=" + start_time +
+                ", end_time=" + end_time +
                 '}';
     }
 }
