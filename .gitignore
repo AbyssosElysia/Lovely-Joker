@@ -25,7 +25,3 @@ replay_pid*
 
 # target folder
 /target/
-
-# application.properties
-src/main/resources/application.properties
-

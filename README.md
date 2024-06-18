@@ -159,13 +159,13 @@ ALTER TABLE DeptPost ADD CONSTRAINT FK_DeptPost_Post FOREIGN KEY (post_id) REFER
 
 ### Spring Boot依赖配置
 
-- 请在src/main/resources/目录下新建application.properties配置文件
+- 请在src/main/resources/目录下修改application.properties配置文件
 
 ```properties
 spring.application.name=CeMengHuiWeb
 
 # MySQL
-spring.datasource.url=jdbc:mysql://localhost:yoursqlport(default:3306)/cemenghui
+spring.datasource.url=jdbc:mysql://localhost:yoursqlport(default:3306)/CeMengHui
 spring.datasource.username=yourusername(default:root)
 spring.datasource.password=yourpassword
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -173,10 +173,11 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 # JPA
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+spring.jpa.open-in-view=false
 
 # Redis
 spring.data.redis.host=localhost
-spring.data.redis.port=6379
+spring.data.redis.port=yoursqlport(default:6379)
 spring.data.redis.database=1
 ```
 
