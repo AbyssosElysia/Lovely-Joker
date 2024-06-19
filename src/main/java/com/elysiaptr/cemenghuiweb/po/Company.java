@@ -1,33 +1,40 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-public class Company implements Serializable {
-    private int id;
+import java.time.Instant;
+
+@Entity
+public class Company {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "contact", nullable = false, length = 60)
     private String contact;
+
+    @Column(name = "logo", length = 100)
     private String logo;
+
+    @Column(name = "name", nullable = false, length = 80)
     private String name;
-    private long mobile;
-    private LocalDateTime time;
+
+    @Column(name = "mobile")
+    private Long mobile;
+
+    @Column(name = "time", nullable = false)
+    private Instant time;
+
+    @Column(name = "remark", length = 150)
     private String remark;
 
-    public Company(int id, String contact, String logo, String name, long mobile, LocalDateTime time, String remark) {
-        this.id = id;
-        this.contact = contact;
-        this.logo = logo;
-        this.name = name;
-        this.mobile = mobile;
-        this.time = time;
-        this.remark = remark;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -55,19 +62,19 @@ public class Company implements Serializable {
         this.name = name;
     }
 
-    public long getMobile() {
+    public Long getMobile() {
         return mobile;
     }
 
-    public void setMobile(long mobile) {
+    public void setMobile(Long mobile) {
         this.mobile = mobile;
     }
 
-    public LocalDateTime getTime() {
+    public Instant getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(Instant time) {
         this.time = time;
     }
 
@@ -79,16 +86,4 @@ public class Company implements Serializable {
         this.remark = remark;
     }
 
-    @Override
-    public String toString() {
-        return "Company{" +
-                "id=" + id +
-                ", contact='" + contact + '\'' +
-                ", logo='" + logo + '\'' +
-                ", name='" + name + '\'' +
-                ", mobile=" + mobile +
-                ", time=" + time +
-                ", remark='" + remark + '\'' +
-                '}';
-    }
 }

@@ -1,46 +1,66 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
-public class User implements Serializable {
-    private int id;
+import java.time.Instant;
+
+@Entity
+public class User {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "username", nullable = false, length = 20)
     private String username;
+
+    @Column(name = "name", nullable = false, length = 60)
     private String name;
+
+    @Column(name = "password", nullable = false, length = 20)
     private String password;
-    private long mobile;
+
+    @Column(name = "mobile")
+    private Long mobile;
+
+    @ColumnDefault("'男'")
+    @Column(name = "gender", nullable = false, length = 4)
     private String gender;
+
+    @Column(name = "email", nullable = false, length = 40)
     private String email;
-    private int status;
-    private LocalDateTime time;
-    private int role;
+
+    @ColumnDefault("0")
+    @Column(name = "status", nullable = false)
+    private Byte status;
+
+    @Column(name = "time", nullable = false)
+    private Instant time;
+
+    @ColumnDefault("1")
+    @Column(name = "role", nullable = false)
+    private Byte role;
+
+    @Column(name = "remark", length = 200)
     private String remark;
-    private int dept_id;
-    private int post_id;
-    private int company_id;
 
-    public User(int id, String username, String name, String password, long mobile, String gender, String email, int status, LocalDateTime time, int role, String remark, int dept_id, int post_id, int company_id) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.password = password;
-        this.mobile = mobile;
-        this.gender = gender;
-        this.email = email;
-        this.status = status;
-        this.time = time;
-        this.role = role;
-        this.remark = remark;
-        this.dept_id = dept_id;
-        this.post_id = post_id;
-        this.company_id = company_id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dept_id")
+    private Department dept;
 
-    public int getId() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,11 +88,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public long getMobile() {
+    public Long getMobile() {
         return mobile;
     }
 
-    public void setMobile(long mobile) {
+    public void setMobile(Long mobile) {
         this.mobile = mobile;
     }
 
@@ -92,27 +112,27 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public int getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Byte status) {
         this.status = status;
     }
 
-    public LocalDateTime getTime() {
+    public Instant getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(Instant time) {
         this.time = time;
     }
 
-    public int getRole() {
+    public Byte getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Byte role) {
         this.role = role;
     }
 
@@ -124,48 +144,28 @@ public class User implements Serializable {
         this.remark = remark;
     }
 
-    public int getDept_id() {
-        return dept_id;
+    public Department getDept() {
+        return dept;
     }
 
-    public void setDept_id(int dept_id) {
-        this.dept_id = dept_id;
+    public void setDept(Department dept) {
+        this.dept = dept;
     }
 
-    public int getPost_id() {
-        return post_id;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPost_id(int post_id) {
-        this.post_id = post_id;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public int getCompany_id() {
-        return company_id;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompany_id(int company_id) {
-        this.company_id = company_id;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", mobile=" + mobile +
-                ", gender='" + gender + '\'' +
-                ", email='" + email + '\'' +
-                ", status=" + status +
-                ", time=" + time +
-                ", role=" + role +
-                ", remark='" + remark + '\'' +
-                ", dept_id=" + dept_id +
-                ", post_id=" + post_id +
-                ", company_id=" + company_id +
-                '}';
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
 }

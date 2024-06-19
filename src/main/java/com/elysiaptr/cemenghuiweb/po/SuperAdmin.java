@@ -1,23 +1,26 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-public class SuperAdmin implements Serializable {
-    private int id;
+@Entity
+public class SuperAdmin {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "username", nullable = false, length = 20)
     private String username;
+
+    @Column(name = "password", nullable = false, length = 20)
     private String password;
 
-    public SuperAdmin(int id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,12 +40,4 @@ public class SuperAdmin implements Serializable {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "SuperAdmin{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

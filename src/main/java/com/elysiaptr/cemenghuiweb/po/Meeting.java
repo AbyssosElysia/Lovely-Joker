@@ -1,33 +1,42 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import org.hibernate.annotations.ColumnDefault;
 
-public class Meeting implements Serializable {
-    private int id;
+import java.time.Instant;
+
+@Entity
+public class Meeting {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 160)
     private String name;
+
+    @Column(name = "content", length = 4000)
     private String content;
+
+    @Column(name = "image", length = 100)
     private String image;
-    private int status;
-    private LocalDateTime start_time;
-    private LocalDateTime end_time;
 
-    public Meeting(int id, String name, String content, String image, int status, LocalDateTime startTime, LocalDateTime end_time) {
-        this.id = id;
-        this.name = name;
-        this.content = content;
-        this.image = image;
-        this.status = status;
-        this.start_time = startTime;
-        this.end_time = end_time;
+    @ColumnDefault("0")
+    @Column(name = "status", nullable = false)
+    private Byte status;
 
-    }
+    @Column(name = "start_time", nullable = false)
+    private Instant startTime;
 
-    public int getId() {
+    @Column(name = "end_time", nullable = false)
+    private Instant endTime;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -51,44 +60,32 @@ public class Meeting implements Serializable {
         return image;
     }
 
-    public void setImage(String image) {this.image = image;}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
-    public int getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Byte status) {
         this.status = status;
     }
 
-    public LocalDateTime getStartTime() {
-        return start_time;
+    public Instant getStartTime() {
+        return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.start_time = startTime;
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
     }
 
-    public LocalDateTime getEnd_time() {
-        return end_time;
+    public Instant getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(LocalDateTime end_time) {
-        this.end_time = end_time;
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 
-
-
-    @Override
-    public String toString() {
-        return "Meeting{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", content='" + content + '\'' +
-                ", image='" + image + '\'' +
-                ", status='" + status + '\'' +
-                ", startTime=" + start_time +
-                ", end_time=" + end_time +
-                '}';
-    }
 }

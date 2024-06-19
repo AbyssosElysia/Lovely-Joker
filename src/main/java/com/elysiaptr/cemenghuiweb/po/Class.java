@@ -1,29 +1,34 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
 
-public class Class implements Serializable {
-    private int id;
+@Entity
+public class Class {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 120)
     private String name;
+
+    @Column(name = "image", length = 100)
     private String image;
+
+    @Column(name = "introduction", length = 1200)
     private String introduction;
+
+    @Column(name = "author", length = 120)
     private String author;
-    private int company_id;
 
-    public Class(int id, String name, String image, String introduction, String author, int company_id) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.introduction = introduction;
-        this.author = author;
-        this.company_id = company_id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,23 +64,12 @@ public class Class implements Serializable {
         this.author = author;
     }
 
-    public int getCompany_id() {
-        return company_id;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompany_id(int company_id) {
-        this.company_id = company_id;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
-    @Override
-    public String toString() {
-        return "Class{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", image='" + image + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", author='" + author + '\'' +
-                ", company_id=" + company_id +
-                '}';
-    }
 }

@@ -1,35 +1,39 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
 
-public class ClassVideo implements Serializable {
-    private int id;
-    private int order;
+@Entity
+public class ClassVideo {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "`order`", nullable = false)
+    private Short order;
+
+    @Column(name = "path", nullable = false, length = 100)
     private String path;
+
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
-    private int class_id;
 
-    public ClassVideo(int id, int order, String path, String title, int class_id) {
-        this.id = id;
-        this.order = order;
-        this.path = path;
-        this.title = title;
-        this.class_id = class_id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id")
+    private Class classField;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getOrder() {
+    public Short getOrder() {
         return order;
     }
 
-    public void setOrder(int order) {
+    public void setOrder(Short order) {
         this.order = order;
     }
 
@@ -49,22 +53,12 @@ public class ClassVideo implements Serializable {
         this.title = title;
     }
 
-    public int getClass_id() {
-        return class_id;
+    public Class getClassField() {
+        return classField;
     }
 
-    public void setClass_id(int class_id) {
-        this.class_id = class_id;
+    public void setClassField(Class classField) {
+        this.classField = classField;
     }
 
-    @Override
-    public String toString() {
-        return "ClassVideo{" +
-                "id=" + id +
-                ", order=" + order +
-                ", path='" + path + '\'' +
-                ", title='" + title + '\'' +
-                ", class_id=" + class_id +
-                '}';
-    }
 }

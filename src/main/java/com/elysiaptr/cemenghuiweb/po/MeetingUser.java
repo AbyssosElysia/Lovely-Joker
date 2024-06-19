@@ -1,48 +1,57 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
-public class MeetingUser implements Serializable {
-    private int meeting_id;
-    private int user_id;
-    private int domain;
+@Entity
+public class MeetingUser {
+    @EmbeddedId
+    private MeetingUserId id;
 
-    public MeetingUser(int meeting_id, int user_id, int domain) {
-        this.meeting_id = meeting_id;
-        this.user_id = user_id;
-        this.domain = domain;
+    @MapsId("meetingId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "meeting_id", nullable = false)
+    private Meeting meeting;
+
+    @MapsId("userId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ColumnDefault("1")
+    @Column(name = "domain", nullable = false)
+    private Byte domain;
+
+    public MeetingUserId getId() {
+        return id;
     }
 
-    public int getMeeting_id() {
-        return meeting_id;
+    public void setId(MeetingUserId id) {
+        this.id = id;
     }
 
-    public void setMeeting_id(int meeting_id) {
-        this.meeting_id = meeting_id;
+    public Meeting getMeeting() {
+        return meeting;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public void setMeeting(Meeting meeting) {
+        this.meeting = meeting;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public User getUser() {
+        return user;
     }
 
-    public int getDomain() {
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Byte getDomain() {
         return domain;
     }
 
-    public void setDomain(int domain) {
+    public void setDomain(Byte domain) {
         this.domain = domain;
     }
 
-    @Override
-    public String toString() {
-        return "MeetingUser{" +
-                "meeting_id=" + meeting_id +
-                ", user_id=" + user_id +
-                ", domain=" + domain +
-                '}';
-    }
 }

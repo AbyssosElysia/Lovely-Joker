@@ -1,31 +1,38 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
 
-public class News implements Serializable {
-    private int id;
+@Entity
+public class News {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "image", length = 100)
     private String image;
+
+    @Column(name = "title", nullable = false, length = 120)
     private String title;
+
+    @Lob
+    @Column(name = "content", nullable = false)
     private String content;
+
+    @Column(name = "author", length = 120)
     private String author;
+
+    @Column(name = "introduction", length = 480)
     private String introduction;
-    private int company_id;
 
-    public News(int id, String image, String title, String content, String author, String introduction, int company_id) {
-        this.id = id;
-        this.image = image;
-        this.title = title;
-        this.content = content;
-        this.author = author;
-        this.introduction = introduction;
-        this.company_id = company_id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,24 +76,12 @@ public class News implements Serializable {
         this.introduction = introduction;
     }
 
-    public int getCompany_id() {
-        return company_id;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompany_id(int company_id) {
-        this.company_id = company_id;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
-    @Override
-    public String toString() {
-        return "News{" +
-                "id=" + id +
-                ", image='" + image + '\'' +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", author='" + author + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", company_id=" + company_id +
-                '}';
-    }
 }

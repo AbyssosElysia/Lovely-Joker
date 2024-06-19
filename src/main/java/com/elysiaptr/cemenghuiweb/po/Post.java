@@ -1,21 +1,23 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import java.io.Serializable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-public class Post implements Serializable {
-    private int id;
+@Entity
+public class Post {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 20)
     private String name;
 
-    public Post(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -27,11 +29,4 @@ public class Post implements Serializable {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }
