@@ -1,10 +1,12 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "Post", schema = "CeMengHui")
 public class Post {
     @Id
     @Column(name = "id", nullable = false)
@@ -12,6 +14,12 @@ public class Post {
 
     @Column(name = "name", nullable = false, length = 20)
     private String name;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<User> users = new ArrayList<User>();
+
+    @ManyToMany(mappedBy = "posts")
+    private List<Department> departments = new ArrayList<Department>();
 
     public Long getId() {
         return id;
@@ -27,6 +35,22 @@ public class Post {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(List<Department> departments) {
+        this.departments = departments;
     }
 
 }

@@ -1,12 +1,13 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "Company", schema = "CeMengHui")
 public class Company {
     @Id
     @Column(name = "id", nullable = false)
@@ -29,6 +30,18 @@ public class Company {
 
     @Column(name = "remark", length = 150)
     private String remark;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ClassC> classCS = new ArrayList<ClassC>();
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<News> news = new ArrayList<News>();
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<User> users = new ArrayList<User>();
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Department> departments = new ArrayList<Department>();
 
     public Long getId() {
         return id;
@@ -84,6 +97,38 @@ public class Company {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<ClassC> getClassCS() {
+        return classCS;
+    }
+
+    public void setClassCS(List<ClassC> classCS) {
+        this.classCS = classCS;
+    }
+
+    public List<News> getNews() {
+        return news;
+    }
+
+    public void setNews(List<News> news) {
+        this.news = news;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(List<Department> departments) {
+        this.departments = departments;
     }
 
 }

@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.po;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "News", schema = "CeMengHui")
 public class News {
     @Id
     @Column(name = "id", nullable = false)

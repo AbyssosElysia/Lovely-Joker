@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "User", schema = "CeMengHui")
 public class User {
     @Id
     @Column(name = "id", nullable = false)
@@ -55,6 +58,12 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToMany(mappedBy = "holder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Meeting> meetingsBeHold = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "users")
+    private List<Meeting> meetings =new ArrayList<Meeting>();
 
     public Long getId() {
         return id;
@@ -166,6 +175,22 @@ public class User {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public List<Meeting> getMeetingsBeHold() {
+        return meetingsBeHold;
+    }
+
+    public void setMeetingsBeHold(List<Meeting> meetingsBeHold) {
+        this.meetingsBeHold = meetingsBeHold;
+    }
+
+    public List<Meeting> getMeetings() {
+        return meetings;
+    }
+
+    public void setMeetings(List<Meeting> meetings) {
+        this.meetings = meetings;
     }
 
 }

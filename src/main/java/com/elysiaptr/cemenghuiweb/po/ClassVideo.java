@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.po;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "ClassVideo", schema = "CeMengHui")
 public class ClassVideo {
     @Id
     @Column(name = "id", nullable = false)
@@ -19,7 +20,7 @@ public class ClassVideo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
-    private Class classField;
+    private ClassC classCField;
 
     public Long getId() {
         return id;
@@ -53,12 +54,20 @@ public class ClassVideo {
         this.title = title;
     }
 
-    public Class getClassField() {
-        return classField;
+    public ClassC getClassField() {
+        return classCField;
     }
 
-    public void setClassField(Class classField) {
-        this.classField = classField;
+    public void setClassField(ClassC classCField) {
+        this.classCField = classCField;
+    }
+
+    public ClassC getClassCField() {
+        return classCField;
+    }
+
+    public void setClassCField(ClassC classCField) {
+        this.classCField = classCField;
     }
 
 }

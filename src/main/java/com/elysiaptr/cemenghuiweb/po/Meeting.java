@@ -1,13 +1,14 @@
 package com.elysiaptr.cemenghuiweb.po;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "Meeting", schema = "CeMengHui")
 public class Meeting {
     @Id
     @Column(name = "id", nullable = false)
@@ -31,6 +32,18 @@ public class Meeting {
 
     @Column(name = "end_time", nullable = false)
     private Instant endTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "holder")
+    private User holder;
+
+    @ManyToMany
+    @JoinTable(
+            name = "MeetingUser",
+            joinColumns = @JoinColumn(name = "meeting_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -86,6 +99,22 @@ public class Meeting {
 
     public void setEndTime(Instant endTime) {
         this.endTime = endTime;
+    }
+
+    public User getHolder() {
+        return holder;
+    }
+
+    public void setHolder(User holder) {
+        this.holder = holder;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
 }

@@ -2,8 +2,12 @@ package com.elysiaptr.cemenghuiweb.po;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-public class Class {
+@Table(name = "ClassC", schema = "CeMengHui")
+public class ClassC {
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
@@ -23,6 +27,9 @@ public class Class {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToMany(mappedBy = "classCField", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ClassVideo> classVideos = new ArrayList<ClassVideo>();
 
     public Long getId() {
         return id;
@@ -70,6 +77,14 @@ public class Class {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public List<ClassVideo> getClassVideos() {
+        return classVideos;
+    }
+
+    public void setClassVideos(List<ClassVideo> classVideos) {
+        this.classVideos = classVideos;
     }
 
 }
