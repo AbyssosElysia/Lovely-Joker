@@ -1,68 +1,29 @@
-package com.elysiaptr.cemenghuiweb.po;
+package com.elysiaptr.cemenghuiweb.dto;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import com.elysiaptr.cemenghuiweb.po.Company;
+import com.elysiaptr.cemenghuiweb.po.Department;
+import com.elysiaptr.cemenghuiweb.po.Meeting;
+import com.elysiaptr.cemenghuiweb.po.Post;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "user", schema = "CeMengHui")
-public class User {
-    @Id
-    @Column(name = "id", nullable = false)
+public class UserDto {
     private Long id;
-
-    @Column(name = "username", nullable = false, length = 20)
     private String username;
-
-    @Column(name = "name", nullable = false, length = 60)
     private String name;
-
-    @Column(name = "password", nullable = false, length = 400)
-    private String password;
-
-    @Column(name = "mobile")
     private Long mobile;
-
-    @ColumnDefault("'男'")
-    @Column(name = "gender", nullable = false, length = 4)
     private String gender;
-
-    @Column(name = "email", nullable = false, length = 40)
     private String email;
-
-    @ColumnDefault("0")
-    @Column(name = "status", nullable = false)
     private Byte status;
-
-    @Column(name = "time", nullable = false)
     private Instant time;
-
-    @ColumnDefault("1")
-    @Column(name = "role", nullable = false)
     private Byte role;
-
-    @Column(name = "remark", length = 200)
     private String remark;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dept_id")
     private Department dept;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
     private Post post;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
     private Company company;
-
-    @OneToMany(mappedBy = "holder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Meeting> meetingsBeHold = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "users")
     private List<Meeting> meetings =new ArrayList<Meeting>();
 
     public Long getId() {
@@ -87,14 +48,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Long getMobile() {
@@ -192,5 +145,4 @@ public class User {
     public void setMeetings(List<Meeting> meetings) {
         this.meetings = meetings;
     }
-
 }

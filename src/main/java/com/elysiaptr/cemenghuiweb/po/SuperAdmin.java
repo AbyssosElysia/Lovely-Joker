@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "SuperAdmin", schema = "CeMengHui")
+@Table(name = "super_admin", schema = "CeMengHui")
 public class SuperAdmin {
     @Id
     @Column(name = "id", nullable = false)
@@ -15,7 +15,7 @@ public class SuperAdmin {
     @Column(name = "username", nullable = false, length = 20)
     private String username;
 
-    @Column(name = "password", nullable = false, length = 20)
+    @Column(name = "password", nullable = false, length = 400)
     private String password;
 
     public Long getId() {

@@ -3,7 +3,7 @@ package com.elysiaptr.cemenghuiweb.po;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ClassVideo", schema = "CeMengHui")
+@Table(name = "class_video", schema = "CeMengHui")
 public class ClassVideo {
     @Id
     @Column(name = "id", nullable = false)

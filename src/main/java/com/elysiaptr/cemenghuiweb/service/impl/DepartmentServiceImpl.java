@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.service.impl;
 import com.elysiaptr.cemenghuiweb.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.po.Department;
 import com.elysiaptr.cemenghuiweb.repo.DepartmentRepository;
+import com.elysiaptr.cemenghuiweb.service.DepartmentService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,16 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DepartmentServiceImpl {
+public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
     @Transactional
-    public Department createDepartment(Department department) {
+    @Override
+    public Department saveDepartment(Department department) {
         return departmentRepository.save(department);
     }
 
     @Transactional
+    @Override
     public Department updateDepartment(Long id, Department departmentDetails) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found for this id :: " + id));
@@ -40,21 +43,25 @@ public class DepartmentServiceImpl {
     }
 
     @Transactional
+    @Override
     public void deleteDepartment(Long id) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found for this id :: " + id));
         departmentRepository.delete(department);
     }
 
+    @Override
     public Department getDepartmentById(Long id) {
         return departmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found for this id :: " + id));
     }
 
+    @Override
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
 
+    @Override
     public Page<Department> getDepartmentsByPage(int page, int size) {
         return departmentRepository.findAll(PageRequest.of(page, size));
     }

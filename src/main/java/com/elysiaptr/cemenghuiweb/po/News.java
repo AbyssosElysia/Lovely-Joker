@@ -3,7 +3,7 @@ package com.elysiaptr.cemenghuiweb.po;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "News", schema = "CeMengHui")
+@Table(name = "news", schema = "CeMengHui")
 public class News {
     @Id
     @Column(name = "id", nullable = false)
@@ -15,8 +15,7 @@ public class News {
     @Column(name = "title", nullable = false, length = 120)
     private String title;
 
-    @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "author", length = 120)

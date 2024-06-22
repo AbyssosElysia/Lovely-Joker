@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Department", schema = "CeMengHui")
+@Table(name = "department", schema = "CeMengHui")
 public class Department {
     @Id
     @Column(name = "id", nullable = false)
@@ -43,7 +43,7 @@ public class Department {
 
     @ManyToMany
     @JoinTable(
-            name = "DeptPost",
+            name = "dept_post",
             joinColumns = @JoinColumn(name = "dept_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Post", schema = "CeMengHui")
+@Table(name = "post", schema = "CeMengHui")
 public class Post {
     @Id
     @Column(name = "id", nullable = false)

@@ -1,5 +1,6 @@
 package com.elysiaptr.cemenghuiweb.service;
 
+import com.elysiaptr.cemenghuiweb.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.po.User;
 import org.springframework.data.domain.Page;
 import java.util.List;
@@ -17,5 +18,9 @@ public interface UserService {
     List<User> getAllUsers();
 
     Page<User> getUsersByPage(int page, int size);
+
+    UserDto getUserDtoById(Long id);
+
+    UserDto convertToDTO(User user);
 }
 

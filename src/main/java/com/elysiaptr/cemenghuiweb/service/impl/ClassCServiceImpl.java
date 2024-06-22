@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.service.impl;
 import com.elysiaptr.cemenghuiweb.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.po.ClassC;
 import com.elysiaptr.cemenghuiweb.repo.ClassCRepository;
+import com.elysiaptr.cemenghuiweb.service.ClassCService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,16 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ClassCServiceImpl {
+public class ClassCServiceImpl implements ClassCService {
     @Autowired
     private ClassCRepository classCRepository;
 
     @Transactional
-    public ClassC createClassC(ClassC classC) {
+    @Override
+    public ClassC saveClassC(ClassC classC) {
         return classCRepository.save(classC);
     }
 
     @Transactional
+    @Override
     public ClassC updateClassC(Long id, ClassC classCDetails) {
         ClassC classC = classCRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassC not found for this id :: " + id));
@@ -37,21 +40,25 @@ public class ClassCServiceImpl {
     }
 
     @Transactional
+    @Override
     public void deleteClassC(Long id) {
         ClassC classC = classCRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassC not found for this id :: " + id));
         classCRepository.delete(classC);
     }
 
+    @Override
     public ClassC getClassCById(Long id) {
         return classCRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassC not found for this id :: " + id));
     }
 
+    @Override
     public List<ClassC> getAllClassCs() {
         return classCRepository.findAll();
     }
 
+    @Override
     public Page<ClassC> getClassCsByPage(int page, int size) {
         return classCRepository.findAll(PageRequest.of(page, size));
     }

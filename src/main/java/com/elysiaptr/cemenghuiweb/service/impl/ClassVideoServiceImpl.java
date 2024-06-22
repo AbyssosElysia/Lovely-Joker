@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.service.impl;
 import com.elysiaptr.cemenghuiweb.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.po.ClassVideo;
 import com.elysiaptr.cemenghuiweb.repo.ClassVideoRepository;
+import com.elysiaptr.cemenghuiweb.service.ClassVideoService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,16 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ClassVideoServiceImpl {
+public class ClassVideoServiceImpl implements ClassVideoService {
     @Autowired
     private ClassVideoRepository classVideoRepository;
 
     @Transactional
-    public ClassVideo createClassVideo(ClassVideo classVideo) {
+    @Override
+    public ClassVideo saveClassVideo(ClassVideo classVideo) {
         return classVideoRepository.save(classVideo);
     }
 
     @Transactional
+    @Override
     public ClassVideo updateClassVideo(Long id, ClassVideo classVideoDetails) {
         ClassVideo classVideo = classVideoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassVideo not found for this id :: " + id));
@@ -35,21 +38,25 @@ public class ClassVideoServiceImpl {
     }
 
     @Transactional
+    @Override
     public void deleteClassVideo(Long id) {
         ClassVideo classVideo = classVideoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassVideo not found for this id :: " + id));
         classVideoRepository.delete(classVideo);
     }
 
+    @Override
     public ClassVideo getClassVideoById(Long id) {
         return classVideoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassVideo not found for this id :: " + id));
     }
 
+    @Override
     public List<ClassVideo> getAllClassVideos() {
         return classVideoRepository.findAll();
     }
 
+    @Override
     public Page<ClassVideo> getClassVideosByPage(int page, int size) {
         return classVideoRepository.findAll(PageRequest.of(page, size));
     }

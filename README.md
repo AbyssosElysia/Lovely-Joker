@@ -27,13 +27,13 @@ CREATE DATABASE CeMengHui CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE CeMengHui;
 
 -- 企业用户User
-CREATE TABLE User (
+CREATE TABLE user (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(20) NOT NULL UNIQUE,
     name VARCHAR(60) NOT NULL,
-    password VARCHAR(20) NOT NULL,
+    password VARCHAR(400) NOT NULL,
     mobile BIGINT,
-    gender CHAR(4) NOT NULL DEFAULT '男',
+    gender VARCHAR(4) NOT NULL DEFAULT '男',
     email VARCHAR(40) NOT NULL,
     status TINYINT NOT NULL DEFAULT 0,
     time DATETIME NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE User (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 企业租户Company
-CREATE TABLE Company (
+CREATE TABLE company (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     contact VARCHAR(60) NOT NULL,
     logo VARCHAR(100),
@@ -56,20 +56,20 @@ CREATE TABLE Company (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 超级管理员SuperAdmin
-CREATE TABLE SuperAdmin (
+CREATE TABLE super_admin (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(20) NOT NULL UNIQUE,
-    password VARCHAR(20) NOT NULL
+    password VARCHAR(400) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 岗位Post
-CREATE TABLE Post (
+CREATE TABLE post (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(20) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 部门Department
-CREATE TABLE Department (
+CREATE TABLE department (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(60) NOT NULL UNIQUE,
     mobile BIGINT,
@@ -81,7 +81,7 @@ CREATE TABLE Department (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 资讯News
-CREATE TABLE News (
+CREATE TABLE news (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     image VARCHAR(100),
     title VARCHAR(120) NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE News (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 课程Class
-CREATE TABLE Class (
+CREATE TABLE classc (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
     image VARCHAR(100),
@@ -102,7 +102,7 @@ CREATE TABLE Class (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 课程视频ClassVideo
-CREATE TABLE ClassVideo (
+CREATE TABLE class_video (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     `order` SMALLINT NOT NULL,
     path VARCHAR(100) NOT NULL,
@@ -111,18 +111,19 @@ CREATE TABLE ClassVideo (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 会议Meeting
-CREATE TABLE Meeting (
+CREATE TABLE meeting (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(160) NOT NULL,
     content VARCHAR(4000),
     image VARCHAR(100),
     status TINYINT NOT NULL DEFAULT 0,
     start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL
+    end_time DATETIME NOT NULL,
+    holder BIGINT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- MeetingUser
-CREATE TABLE MeetingUser (
+CREATE TABLE meeting_user (
     meeting_id BIGINT,
     user_id BIGINT,
     domain TINYINT NOT NULL DEFAULT 1,
@@ -130,38 +131,41 @@ CREATE TABLE MeetingUser (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- DeptPost
-CREATE TABLE DeptPost (
+CREATE TABLE dept_post (
     dept_id BIGINT,
     post_id BIGINT,
     PRIMARY KEY (dept_id, post_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Adding foreign keys after creating all tables
-ALTER TABLE User
-ADD CONSTRAINT FK_User_Dept FOREIGN KEY (dept_id) REFERENCES Department(id),
-ADD CONSTRAINT FK_User_Post FOREIGN KEY (post_id) REFERENCES Post(id),
-ADD CONSTRAINT FK_User_Company FOREIGN KEY (company_id) REFERENCES Company(id);
+ALTER TABLE user
+ADD CONSTRAINT FK_User_Dept FOREIGN KEY (dept_id) REFERENCES department(id),
+ADD CONSTRAINT FK_User_Post FOREIGN KEY (post_id) REFERENCES post(id),
+ADD CONSTRAINT FK_User_Company FOREIGN KEY (company_id) REFERENCES company(id);
 
-ALTER TABLE Department
-ADD CONSTRAINT FK_Dept_FatherDept FOREIGN KEY (father_dept_id) REFERENCES Department(id),
-ADD CONSTRAINT FK_Dept_Company FOREIGN KEY (company_id) REFERENCES Company(id);
+ALTER TABLE department
+ADD CONSTRAINT FK_Dept_FatherDept FOREIGN KEY (father_dept_id) REFERENCES department(id),
+ADD CONSTRAINT FK_Dept_Company FOREIGN KEY (company_id) REFERENCES company(id);
 
-ALTER TABLE News
-ADD CONSTRAINT FK_News_Company FOREIGN KEY (company_id) REFERENCES Company(id);
+ALTER TABLE news
+ADD CONSTRAINT FK_News_Company FOREIGN KEY (company_id) REFERENCES company(id);
 
-ALTER TABLE Class
-ADD CONSTRAINT FK_Class_Company FOREIGN KEY (company_id) REFERENCES Company(id);
+ALTER TABLE classc
+ADD CONSTRAINT FK_Class_Company FOREIGN KEY (company_id) REFERENCES company(id);
 
-ALTER TABLE ClassVideo
-ADD CONSTRAINT FK_ClassVideo_Class FOREIGN KEY (class_id) REFERENCES Class(id);
+ALTER TABLE class_video
+ADD CONSTRAINT FK_ClassVideo_Class FOREIGN KEY (class_id) REFERENCES classc(id);
 
-ALTER TABLE MeetingUser
-ADD CONSTRAINT FK_MeetingUser_Meeting FOREIGN KEY (meeting_id) REFERENCES Meeting(id),
-ADD CONSTRAINT FK_MeetingUser_User FOREIGN KEY (user_id) REFERENCES User(id);
+ALTER TABLE meeting
+ADD  CONSTRAINT FK_Meeting_Holder FOREIGN KEY (holder) REFERENCES user(id);
 
-ALTER TABLE DeptPost
-ADD CONSTRAINT FK_DeptPost_Dept FOREIGN KEY (dept_id) REFERENCES Department(id),
-ADD CONSTRAINT FK_DeptPost_Post FOREIGN KEY (post_id) REFERENCES Post(id);
+ALTER TABLE meeting_user
+ADD CONSTRAINT FK_MeetingUser_Meeting FOREIGN KEY (meeting_id) REFERENCES meeting(id),
+ADD CONSTRAINT FK_MeetingUser_User FOREIGN KEY (user_id) REFERENCES user(id);
+
+ALTER TABLE dept_post
+ADD CONSTRAINT FK_DeptPost_Dept FOREIGN KEY (dept_id) REFERENCES department(id),
+ADD CONSTRAINT FK_DeptPost_Post FOREIGN KEY (post_id) REFERENCES post(id);
 
 ```
 

@@ -1,8 +1,10 @@
 package com.elysiaptr.cemenghuiweb.service.impl;
 
+import com.elysiaptr.cemenghuiweb.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.po.User;
 import com.elysiaptr.cemenghuiweb.repo.UserRepository;
+import com.elysiaptr.cemenghuiweb.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,16 +14,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
     @Transactional
-    public User createUser(User user) {
+    @Override
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 
     @Transactional
+    @Override
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
@@ -46,22 +50,36 @@ public class UserServiceImpl {
     }
 
     @Transactional
+    @Override
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
         userRepository.delete(user);
     }
 
+    @Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
     }
 
+    @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    @Override
     public Page<User> getUsersByPage(int page, int size) {
         return userRepository.findAll(PageRequest.of(page, size));
+    }
+
+    @Override
+    public UserDto getUserDtoById(Long id) {
+        return null;
+    }
+
+    @Override
+    public UserDto convertToDTO(User user) {
+        return null;
     }
 }
