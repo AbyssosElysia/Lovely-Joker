@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.service.impl;
 import com.elysiaptr.cemenghuiweb.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.po.User;
 import com.elysiaptr.cemenghuiweb.repo.UserRepository;
+import com.elysiaptr.cemenghuiweb.utils.BCryptUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,9 @@ public class UserServiceImpl {
 
     @Transactional
     public User createUser(User user) {
+        // 加密密码
+        String encryptedPassword = BCryptUtil.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
         return userRepository.save(user);
     }
 
@@ -28,7 +32,11 @@ public class UserServiceImpl {
 
         user.setUsername(userDetails.getUsername());
         user.setName(userDetails.getName());
-        user.setPassword(userDetails.getPassword());
+        // 加密密码
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+            String encryptedPassword = BCryptUtil.encode(userDetails.getPassword());
+            user.setPassword(encryptedPassword);
+        }
         user.setMobile(userDetails.getMobile());
         user.setGender(userDetails.getGender());
         user.setEmail(userDetails.getEmail());
