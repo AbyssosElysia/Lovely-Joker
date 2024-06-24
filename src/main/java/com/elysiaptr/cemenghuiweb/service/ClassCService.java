@@ -1,5 +1,6 @@
 package com.elysiaptr.cemenghuiweb.service;
 
+import com.elysiaptr.cemenghuiweb.dto.ClassCDto;
 import com.elysiaptr.cemenghuiweb.po.ClassC;
 import org.springframework.data.domain.Page;
 
@@ -17,4 +18,9 @@ public interface ClassCService {
     List<ClassC> getAllClassCs();
 
     Page<ClassC> getClassCsByPage(int page, int size);
+
+
+    ClassCDto toDto(ClassC classC);
+
+    ClassC toClass(ClassCDto classCDto);
 }

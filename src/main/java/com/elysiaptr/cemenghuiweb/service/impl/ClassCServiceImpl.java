@@ -1,5 +1,6 @@
 package com.elysiaptr.cemenghuiweb.service.impl;
 
+import com.elysiaptr.cemenghuiweb.dto.ClassCDto;
 import com.elysiaptr.cemenghuiweb.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.po.ClassC;
 import com.elysiaptr.cemenghuiweb.repo.ClassCRepository;
@@ -61,5 +62,15 @@ public class ClassCServiceImpl implements ClassCService {
     @Override
     public Page<ClassC> getClassCsByPage(int page, int size) {
         return classCRepository.findAll(PageRequest.of(page, size));
+    }
+
+    @Override
+    public ClassCDto toDto(ClassC classC) {
+        return null;
+    }
+
+    @Override
+    public ClassC toClass(ClassCDto classCDto) {
+        return null;
     }
 }
