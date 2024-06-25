@@ -21,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public User saveUser(User user) {
+        // 加密密码
+        String encryptedPassword = BCryptUtil.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
         return userRepository.save(user);
     }
 
@@ -37,8 +40,8 @@ public class UserServiceImpl implements UserService {
             String encryptedPassword = BCryptUtil.encode(userDetails.getPassword());
             user.setPassword(encryptedPassword);
         }
-        user.setMobile(userDetails.getMobile());
         user.setGender(userDetails.getGender());
+        user.setMobile(userDetails.getMobile());
         user.setEmail(userDetails.getEmail());
         user.setStatus(userDetails.getStatus());
         user.setTime(userDetails.getTime());
@@ -49,7 +52,6 @@ public class UserServiceImpl implements UserService {
         user.setCompany(userDetails.getCompany());
         user.setMeetingsBeHold(userDetails.getMeetingsBeHold());
         user.setMeetings(userDetails.getMeetings());
-
         return userRepository.save(user);
     }
 
