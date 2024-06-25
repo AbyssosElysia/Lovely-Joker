@@ -14,15 +14,20 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class LoginController {
+    public static class LoginRequest {
+        public String username;
+        public String password;
+    }
+
     @PostMapping("/login")
-    public Response login(String username, String password, HttpServletRequest request) {
-        // 验证用户名和密码
-        if ("admin".equals(username) && "password".equals(password)) {
-            request.getSession().setAttribute("user", username);
+    public Response login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        System.out.println("Login attempt: username=" + loginRequest.username + ", password=" + loginRequest.password);
+        if ("admin".equals(loginRequest.username) && "password".equals(loginRequest.password)) {
+            request.getSession().setAttribute("user", loginRequest.username);
             return Response.okResponse("true");
         } else {
-            Map<String, Object> response = new HashMap<>();
             return Response.notFoundResponse();
         }
     }
 }
+
