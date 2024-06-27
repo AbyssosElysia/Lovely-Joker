@@ -49,7 +49,7 @@ public class UserServiceImpl {
         user.setCompany(userDetails.getCompany());
         user.setMeetingsBeHold(userDetails.getMeetingsBeHold());
         user.setMeetings(userDetails.getMeetings());
-        
+
         return userRepository.save(user);
     }
 
