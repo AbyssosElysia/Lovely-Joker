@@ -18,7 +18,7 @@ public class UserServiceImpl {
     private UserRepository userRepository;
 
     @Transactional
-    public User saveUser(User user) {
+    public User createUser(User user) {
         // 加密密码
         String encryptedPassword = BCryptUtil.encode(user.getPassword());
         user.setPassword(encryptedPassword);
@@ -37,8 +37,8 @@ public class UserServiceImpl {
             String encryptedPassword = BCryptUtil.encode(userDetails.getPassword());
             user.setPassword(encryptedPassword);
         }
-        user.setGender(userDetails.getGender());
         user.setMobile(userDetails.getMobile());
+        user.setGender(userDetails.getGender());
         user.setEmail(userDetails.getEmail());
         user.setStatus(userDetails.getStatus());
         user.setTime(userDetails.getTime());
@@ -49,6 +49,7 @@ public class UserServiceImpl {
         user.setCompany(userDetails.getCompany());
         user.setMeetingsBeHold(userDetails.getMeetingsBeHold());
         user.setMeetings(userDetails.getMeetings());
+        
         return userRepository.save(user);
     }
 
