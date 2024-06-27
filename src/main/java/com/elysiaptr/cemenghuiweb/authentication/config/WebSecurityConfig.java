@@ -54,18 +54,29 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         commonHttpSetting(http);
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/login/username")
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .securityMatcher("/api/**")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/login/username").permitAll()
+                        .anyRequest().authenticated());
 
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    public SecurityFilterChain openApiFilterChain(HttpSecurity http) throws Exception {
+        commonHttpSetting(http);
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .securityMatcher("/open_api/**")
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll());
 
         return http.build();
     }
+
 
     /** 禁用不必要的默认filter，处理异常响应内容 */
     private void commonHttpSetting(HttpSecurity http) throws Exception {

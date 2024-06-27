@@ -1,5 +1,6 @@
 package com.elysiaptr.cemenghuiweb.authentication.controller;
 
+import com.elysiaptr.cemenghuiweb.authentication.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.authentication.service.UserLoginService;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.po.User;
@@ -21,7 +22,11 @@ public class UserLoginController {
     private UserLoginService userLoginService;
 
     @PostMapping("/username")
-    public R login(@RequestBody User user) {
+    public R login(@RequestBody UserDto userDto) {
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setPassword(userDto.getPassword());
+        System.out.println(userDto.getCaptcha());
         String jwt = userLoginService.login(user);
         if (StringUtils.hasLength(jwt)) {
             return R.OK().message("Login success").data("token", jwt);
