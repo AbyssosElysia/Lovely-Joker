@@ -2,7 +2,9 @@ package com.elysiaptr.cemenghuiweb.authentication.controller;
 
 import com.elysiaptr.cemenghuiweb.authentication.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.authentication.service.UserLoginService;
+import com.elysiaptr.cemenghuiweb.common.consts.RedisKeyPrefixes;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
+import com.elysiaptr.cemenghuiweb.common.utils.StringRedisUtils;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,9 @@ public class UserLoginController {
     @Autowired
     private UserLoginService userLoginService;
 
+    @Autowired
+    StringRedisUtils stringRedisUtils;
+
     @PostMapping("/username")
     public R login(@RequestBody UserDto userDto) {
         User user = new User();
@@ -28,7 +33,8 @@ public class UserLoginController {
         user.setPassword(userDto.getPassword());
         System.out.println(userDto.getCaptcha());
         String jwt = userLoginService.login(user);
-        if (StringUtils.hasLength(jwt)) {
+        String key = RedisKeyPrefixes.PREFIX_CAPTCHA + userDto.getUuid();
+        if (StringUtils.hasLength(jwt) && userDto.getCaptcha().equals(stringRedisUtils.get(key))) {
             return R.OK().message("Login success").data("token", jwt);
         }
         return R.notFound().message("Login failed");

@@ -1,5 +1,4 @@
 package com.elysiaptr.cemenghuiweb.web.controller;
-
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.web.po.Company;
@@ -9,20 +8,18 @@ import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/open_api")
 public class UserController {
     @Autowired
     private UserService userService;
     private CompanyService companyService;
-
 //新增
     @PostMapping("/user/add")
+
     public R addUser(@RequestBody UserDto userDto){
         // 非空
         if (userDto == null) {
@@ -109,4 +106,3 @@ public R searchAllUser() {
 
     }
 }
-
