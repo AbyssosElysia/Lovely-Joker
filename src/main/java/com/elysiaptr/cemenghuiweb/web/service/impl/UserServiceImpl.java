@@ -12,7 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Transactional
-    public User createUser(User user) {
+    public User saveUser(User user) {
         // 加密密码
         String encryptedPassword = BCryptUtil.encode(user.getPassword());
         user.setPassword(encryptedPassword);
@@ -69,6 +73,34 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
     }
+    public List<User> searchByUsername(String username) {
+        List<User> userList =null;
+        return userList.stream()
+                .filter(user -> user.getUsername().contains(username))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<User> searchByMobile(Long mobile){
+        List<User> userList =null;
+        return userList.stream()
+                .filter(user -> user.getMobile().equals(mobile))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<User> searchByStatus(Integer status){
+        List<User> userList =null;
+        return userList.stream()
+                .filter(user -> Objects.equals(user.getStatus(), status.byteValue()))
+                .collect(Collectors.toList());
+    }
+    public List<User> searchByTime(LocalDateTime time) {
+        List<User> userList =null;
+        ZoneId zoneId = ZoneId.systemDefault(); // 获取当前系统时区
+        return userList.stream()
+                .filter(user -> user.getTime().atZone(zoneId).toLocalDateTime().equals(time))
+                .collect(Collectors.toList());
+
+    }
 
     @Override
     public List<User> getAllUsers() {
@@ -89,4 +121,5 @@ public class UserServiceImpl implements UserService {
     public UserDto convertToDTO(User user) {
         return null;
     }
+
 }
