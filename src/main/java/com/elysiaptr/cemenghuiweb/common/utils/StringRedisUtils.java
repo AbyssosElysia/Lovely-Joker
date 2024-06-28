@@ -5,6 +5,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 @Component
 public class StringRedisUtils {
 
@@ -25,6 +27,10 @@ public class StringRedisUtils {
 
     public Boolean hasKey(String key) {
         return stringRedisTemplate.hasKey(key);
+    }
+
+    public void expire(String key, long timeout, TimeUnit timeUnit) {
+        stringRedisTemplate.expire(key, timeout, timeUnit);
     }
 
     private ValueOperations<String, String> getValueOperations() {
