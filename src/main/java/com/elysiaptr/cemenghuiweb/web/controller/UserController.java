@@ -9,6 +9,7 @@ import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 @RestController
@@ -32,6 +33,7 @@ public class UserController {
         user.setMobile(userDto.getMobile());
         user.setGender(userDto.getGender());
         user.setEmail(userDto.getEmail());
+        user.setTime(new Date().toInstant());
         Company company = companyService.getCompanyById((long) userDto.getCompany_id());
         if (company == null) {
             return R.error().message("无效的公司ID");

@@ -3,21 +3,14 @@ package com.elysiaptr.cemenghuiweb.web.dto;
 import java.time.Instant;
 
 public class CompanyDto {
-    private Long id;
+
     private String contact;
     private String logo;
     private String name;
     private Long mobile;
-    private Instant time;
     private String remark;
+    private String userName;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getContact() {
         return contact;
@@ -65,5 +58,13 @@ public class CompanyDto {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

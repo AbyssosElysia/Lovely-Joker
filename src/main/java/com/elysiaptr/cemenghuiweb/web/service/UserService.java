@@ -18,6 +18,8 @@ public interface UserService {
 
     User getUserById(Long id);
 
+    User getUserByUserName(String userName);
+
     List<User> getAllUsers();
 
     Page<User> getUsersByPage(int page, int size);

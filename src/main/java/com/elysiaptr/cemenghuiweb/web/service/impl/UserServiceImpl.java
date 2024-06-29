@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         user.setGender(userDetails.getGender());
         user.setEmail(userDetails.getEmail());
         user.setStatus(userDetails.getStatus());
-        user.setTime(userDetails.getTime());
+        user.setTime(null);
         user.setRole(userDetails.getRole());
         user.setRemark(userDetails.getRemark());
         user.setDept(userDetails.getDept());
@@ -73,6 +73,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
     }
+
+    @Override
+    public User getUserByUserName(String userName){
+        return userRepository.findByUsername(userName)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this userName :: " + userName));
+    }
+
     public List<User> searchByUsername(String username) {
         List<User> userList =null;
         return userList.stream()
