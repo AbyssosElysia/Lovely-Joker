@@ -5,7 +5,10 @@ import com.elysiaptr.cemenghuiweb.authentication.service.UserLoginService;
 import com.elysiaptr.cemenghuiweb.common.consts.RedisKeyPrefixes;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.common.utils.StringRedisUtils;
+import com.elysiaptr.cemenghuiweb.web.po.Company;
 import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
+import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserLoginController {
 
     @Autowired
-    private UserLoginService userLoginService;
+    UserLoginService userLoginService;
 
     @Autowired
     StringRedisUtils stringRedisUtils;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping("/username")
     public R login(@RequestBody UserDto userDto) {
@@ -35,8 +41,14 @@ public class UserLoginController {
         String jwt = userLoginService.login(user);
         String key = RedisKeyPrefixes.PREFIX_CAPTCHA + userDto.getUuid();
         if (StringUtils.hasLength(jwt) && userDto.getCaptcha().equals(stringRedisUtils.get(key))) {
-            return R.OK().message("Login success").data("token", jwt);
+            User thisUser = userService.getUserByUsername(user.getUsername());
+            int authentication = thisUser.getRole();
+            if (authentication == 0) {
+                return R.OK().message("Login success").data("token", jwt).data("user", thisUser).data("authentication", authentication).data("company", thisUser.getCompany());
+            }
+            return R.OK().message("Login success").data("token", jwt).data("user", thisUser).data("authentication", authentication);
         }
+        stringRedisUtils.delete(key);
         return R.notFound().message("Login failed");
     }
 }

@@ -23,5 +23,7 @@ public interface UserService {
     UserDto getUserDtoById(Long id);
 
     UserDto convertToDTO(User user);
+
+    User getUserByUsername(String username);
 }
 
