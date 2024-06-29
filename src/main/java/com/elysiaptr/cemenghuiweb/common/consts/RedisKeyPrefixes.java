@@ -16,4 +16,6 @@ public interface RedisKeyPrefixes {
      * 用户授权JWT
      */
     String PREFIX_LOGIN_TOKEN = PREFIX_BASE + "LOGIN_TOKEN:";
+
+    String RESET_CAPTCHA = PREFIX_BASE + "RESET_USER:";
 }

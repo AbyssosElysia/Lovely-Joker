@@ -35,5 +35,6 @@ public interface UserService {
     List<User> searchByStatus(Integer status);
 
     List<User> searchByTime(LocalDateTime time);
+    User getUserByUsername(String username);
 }
 
