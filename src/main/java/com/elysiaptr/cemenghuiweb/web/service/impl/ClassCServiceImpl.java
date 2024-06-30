@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.web.service.impl;
 import com.elysiaptr.cemenghuiweb.web.dto.ClassCDto;
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.web.po.ClassC;
+import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.ClassCRepository;
 import com.elysiaptr.cemenghuiweb.web.service.ClassCService;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClassCServiceImpl implements ClassCService {
@@ -35,7 +37,7 @@ public class ClassCServiceImpl implements ClassCService {
         classC.setIntroduction(classCDetails.getIntroduction());
         classC.setAuthor(classCDetails.getAuthor());
         classC.setCompany(classCDetails.getCompany());
-        classC.setClassVideos(classCDetails.getClassVideos());
+        classC.setClassVideo(classCDetails.getClassVideo());
 
         return classCRepository.save(classC);
     }
@@ -72,5 +74,20 @@ public class ClassCServiceImpl implements ClassCService {
     @Override
     public ClassC toClass(ClassCDto classCDto) {
         return null;
+    }
+
+    @Override
+    public  List<ClassC> searchClassByName(String name){
+        List<ClassC> classCList =null;
+        return classCList.stream()
+                .filter(classC -> classC.getName().contains(name))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<ClassC> searchClassById(Long id){
+        List<ClassC> classCList =null;
+        return classCList.stream()
+                .filter(classC -> classC.getId().equals(id))
+                .collect(Collectors.toList());
     }
 }

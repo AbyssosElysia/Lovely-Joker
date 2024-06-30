@@ -8,7 +8,7 @@ public class DepartmentDto {
     private Long mobile;
     private String email;
     private Byte status;
-    private Instant time;
+    private String leader;
 
     private String fatherDept_id;
     private String company_id;
@@ -53,14 +53,6 @@ public class DepartmentDto {
         this.status = status;
     }
 
-    public Instant getTime() {
-        return time;
-    }
-
-    public void setTime(Instant time) {
-        this.time = time;
-    }
-
     public String getFatherDept_id() {
         return fatherDept_id;
     }
@@ -75,5 +67,13 @@ public class DepartmentDto {
 
     public void setCompany_id(String company_id) {
         this.company_id = company_id;
+    }
+
+    public String getLeader() {
+        return leader;
+    }
+
+    public void setLeader(String leader) {
+        this.leader = leader;
     }
 }

@@ -11,7 +11,7 @@ public class MeetingDto {
     private Instant startTime;
     private Instant endTime;
 
-    private String holder_id;
+    private String holder;
 
     public Long getId() {
         return id;
@@ -69,11 +69,11 @@ public class MeetingDto {
         this.endTime = endTime;
     }
 
-    public String getHolder_id() {
-        return holder_id;
+    public String getHolder() {
+        return holder;
     }
 
-    public void setHolder_id(String holder_id) {
-        this.holder_id = holder_id;
+    public void setHolder(String holder) {
+        this.holder = holder;
     }
 }

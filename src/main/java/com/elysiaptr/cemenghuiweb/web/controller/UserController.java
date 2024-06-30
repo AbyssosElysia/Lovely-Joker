@@ -47,9 +47,9 @@ public class UserController {
 //删除
     @PostMapping("/user/delete")
     public R deleteUser(@RequestBody UserDto userDto){
-        User user=new User();
-        user.setUsername(userDto.getUsername());
-        userService.deleteUser(user.getId());
+        //User user=new User();
+        //user.setUsername(userDto.getUsername());
+        userService.deleteUser(userDto.getId());
         return R.OK().data("提示", "删除用户成功");
     }
 
@@ -62,7 +62,7 @@ public class UserController {
         user.setGender(userDto.getGender());
         user.setMobile(userDto.getMobile());
         user.setEmail(userDto.getEmail());
-        userService.updateUser(user.getId(), user);
+        userService.updateUser(userDto.getId(), user);
         return R.OK().data("提示", "修改信息成功");
     }
 //查找
@@ -75,27 +75,18 @@ public R searchByListUser(@RequestParam(required = false) String username,
 
     if (username != null) {
         userList=userService.searchByUsername(username);
-//        userList = userList.stream()
-//                .filter(user -> user.getUsername().contains(username))
-//                .collect(Collectors.toList());
+
     }
     if (mobile != null) {
         userList=userService.searchByMobile(mobile);
-//        userList = userList.stream()
-//                .filter(user -> user.getMobile().equals(mobile))
-//                .collect(Collectors.toList());
+
     }
     if (status != null) {
         userList=userService.searchByStatus(status);
-//        userList = userList.stream()
-//                .filter(user -> user.getStatus().equals(status))
-//                .collect(Collectors.toList());
     }
     if (time != null) {
         userList=userService.searchByTime(time);
-//        userList = userList.stream()
-//                .filter(user -> user.getTime().equals(time))
-//                .collect(Collectors.toList());
+
     }
 
     return R.OK().data("userList", userList);

@@ -24,12 +24,15 @@ public class ClassC {
     @Column(name = "author", length = 120)
     private String author;
 
+    @OneToOne(mappedBy = "classCField", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ClassVideo classVideo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "classCField", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ClassVideo> classVideos = new ArrayList<ClassVideo>();
+   /* @OneToMany(mappedBy = "classCField", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ClassVideo> classVideos = new ArrayList<ClassVideo>();*/
 
     public Long getId() {
         return id;
@@ -79,12 +82,12 @@ public class ClassC {
         this.company = company;
     }
 
-    public List<ClassVideo> getClassVideos() {
-        return classVideos;
+
+    public ClassVideo getClassVideo() {
+        return classVideo;
     }
 
-    public void setClassVideos(List<ClassVideo> classVideos) {
-        this.classVideos = classVideos;
+    public void setClassVideo(ClassVideo classVideo) {
+        this.classVideo = classVideo;
     }
-
 }

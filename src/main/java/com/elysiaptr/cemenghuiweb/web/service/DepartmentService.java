@@ -17,4 +17,8 @@ public interface DepartmentService {
     List<Department> getAllDepartments();
 
     Page<Department> getDepartmentsByPage(int page, int size);
+
+    List<Department> searchDepartmentByStatus(byte status);
+
+    List<Department> searchDepartmentByName(String name);
 }

@@ -2,6 +2,7 @@ package com.elysiaptr.cemenghuiweb.web.service.impl;
 
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.web.po.News;
+import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.NewsRepository;
 import com.elysiaptr.cemenghuiweb.web.service.NewsService;
 import jakarta.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -61,6 +63,34 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public Page<News> getNewsByPage(int page, int size) {
         return newsRepository.findAll(PageRequest.of(page, size));
+    }
+    @Override
+    public List<News> searchNewsByTitle(String title){
+        List<News> newsList =null;
+        return newsList.stream()
+                .filter(news -> news.getTitle().contains(title))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<News> searchNewsByAuthor(String author){
+        List<News> newsList =null;
+        return newsList.stream()
+                .filter(news -> news.getAuthor().contains(author))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<News> searchNewsByIntroduction(String introduction){
+        List<News> newsList =null;
+        return newsList.stream()
+                .filter(news -> news.getIntroduction().contains(introduction))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<News> searchNewsById(long id){
+        List<News> newsList =null;
+        return newsList.stream()
+                .filter(news -> news.getId().equals(id))
+                .collect(Collectors.toList());
     }
 
 }

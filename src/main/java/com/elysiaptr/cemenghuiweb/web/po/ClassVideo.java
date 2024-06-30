@@ -18,7 +18,11 @@ public class ClassVideo {
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+/*    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id")
+    private ClassC classCField;*/
+
+    @OneToOne
     @JoinColumn(name = "class_id")
     private ClassC classCField;
 

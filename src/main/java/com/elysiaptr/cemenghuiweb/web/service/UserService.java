@@ -18,8 +18,6 @@ public interface UserService {
 
     User getUserById(Long id);
 
-    User getUserByUserName(String userName);
-
     List<User> getAllUsers();
 
     Page<User> getUsersByPage(int page, int size);
@@ -35,6 +33,7 @@ public interface UserService {
     List<User> searchByStatus(Integer status);
 
     List<User> searchByTime(LocalDateTime time);
+
     User getUserByUsername(String username);
 }
 

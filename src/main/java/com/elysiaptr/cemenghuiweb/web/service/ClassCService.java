@@ -19,6 +19,9 @@ public interface ClassCService {
 
     Page<ClassC> getClassCsByPage(int page, int size);
 
+    List<ClassC> searchClassByName(String name);
+
+    List<ClassC> searchClassById(Long id);
 
     ClassCDto toDto(ClassC classC);
 

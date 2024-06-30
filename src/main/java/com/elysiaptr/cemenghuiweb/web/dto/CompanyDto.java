@@ -3,13 +3,13 @@ package com.elysiaptr.cemenghuiweb.web.dto;
 import java.time.Instant;
 
 public class CompanyDto {
-
-    private String contact;
+    private Long id;
+    private String contact;//联系人
     private String logo;
-    private String name;
+    private String name;//企业名称
     private Long mobile;
     private String remark;
-    private String userName;
+    private String adminName;//管理员
 
 
     public String getContact() {
@@ -44,13 +44,6 @@ public class CompanyDto {
         this.mobile = mobile;
     }
 
-    public Instant getTime() {
-        return time;
-    }
-
-    public void setTime(Instant time) {
-        this.time = time;
-    }
 
     public String getRemark() {
         return remark;
@@ -60,11 +53,20 @@ public class CompanyDto {
         this.remark = remark;
     }
 
-    public String getUserName() {
-        return userName;
+
+    public String getAdminName() {
+        return adminName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

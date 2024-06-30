@@ -2,6 +2,7 @@ package com.elysiaptr.cemenghuiweb.web.service.impl;
 
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.web.po.Department;
+import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.DepartmentRepository;
 import com.elysiaptr.cemenghuiweb.web.service.DepartmentService;
 import jakarta.transaction.Transactional;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -64,5 +67,19 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Page<Department> getDepartmentsByPage(int page, int size) {
         return departmentRepository.findAll(PageRequest.of(page, size));
+    }
+    @Override
+    public  List<Department> searchDepartmentByStatus(byte status){
+        List<Department> departmentList =null;
+        return departmentList.stream()
+                .filter(department -> Objects.equals(department.getStatus(), status))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<Department> searchDepartmentByName(String name){
+        List<Department> departmentList =null;
+        return departmentList.stream()
+                .filter(department -> department.getName().contains(name))
+                .collect(Collectors.toList());
     }
 }

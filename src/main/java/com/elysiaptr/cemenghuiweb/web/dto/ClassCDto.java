@@ -1,5 +1,7 @@
 package com.elysiaptr.cemenghuiweb.web.dto;
 
+import java.util.List;
+
 public class ClassCDto {
     private Long id;
     private String name;
@@ -8,6 +10,10 @@ public class ClassCDto {
     private String author;
 
     private String company_id;
+    private ClassVideoDto classVideos;
+
+ /*   private String classvideo.path;
+    private int classvideo_order;*/
 
     public Long getId() {
         return id;
@@ -55,5 +61,13 @@ public class ClassCDto {
 
     public void setCompany_id(String company_id) {
         this.company_id = company_id;
+    }
+
+    public ClassVideoDto getClassVideos() {
+        return classVideos;
+    }
+
+    public void setClassVideos(ClassVideoDto classVideos) {
+        this.classVideos = classVideos;
     }
 }
