@@ -8,6 +8,7 @@ import com.elysiaptr.cemenghuiweb.common.utils.StringRedisUtils;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,9 @@ public class EmailController {
 
     @Autowired
     StringRedisUtils stringRedisUtils;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @GetMapping("/email/code")
     public R emailCode(@RequestParam String username, @RequestParam String to) {
@@ -59,7 +63,7 @@ public class EmailController {
             stringRedisUtils.delete(key);
             return R.error().data("error", "code not match");
         }
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         return R.OK().data("data", "reset code success");
     }
 }

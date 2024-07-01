@@ -2,10 +2,10 @@ package com.elysiaptr.cemenghuiweb.authentication.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.elysiaptr.cemenghuiweb.authentication.dto.LoginUser;
+import com.elysiaptr.cemenghuiweb.authentication.dto.LoginUserDto;
 import com.elysiaptr.cemenghuiweb.authentication.service.UserLoginService;
 import com.elysiaptr.cemenghuiweb.common.utils.JwtUtils;
 import com.elysiaptr.cemenghuiweb.web.po.User;
-import com.elysiaptr.cemenghuiweb.web.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +20,7 @@ public class UserLoginServiceImpl implements UserLoginService {
     private AuthenticationManager authenticationManager;
 
     @Override
-    public String login(User user) {
+    public String login(LoginUserDto user) {
         // 封装Authentication对象
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword());
