@@ -185,12 +185,16 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 # JPA
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
-spring.jpa.open-in-view=false
+spring.jpa.open-in-view=true
 
 # Redis
 spring.data.redis.host=localhost
-spring.data.redis.port=yoursqlport(default:6379)
+spring.data.redis.port=6379
 spring.data.redis.database=1
+
+# Jackson
+spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+spring.jackson.time-zone=GMT+8
 ```
 
 ## 文件存储路径
