@@ -8,7 +8,16 @@ public class NewsDto {
     private String author;
     private String introduction;
 
-    private String company_id;
+    private Long company_id;
+    private String company_name;
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
+    }
 
     public Long getId() {
         return id;
@@ -58,11 +67,12 @@ public class NewsDto {
         this.introduction = introduction;
     }
 
-    public String getCompany_id() {
+
+    public Long getCompany_id() {
         return company_id;
     }
 
-    public void setCompany_id(String company_id) {
+    public void setCompany_id(Long company_id) {
         this.company_id = company_id;
     }
 }

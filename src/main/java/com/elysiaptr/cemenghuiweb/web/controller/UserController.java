@@ -6,8 +6,11 @@ import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.UserRepository;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +20,6 @@ import java.util.stream.Collectors;
 public class UserController {
     @Autowired
     private UserService userService;
-    private CompanyService companyService;
 //新增
     @PostMapping("/user/add")
 
@@ -27,18 +29,22 @@ public class UserController {
             return R.error().message("用户信息不能为空");
         }
         User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
-        user.setName(userDto.getName());
-        user.setMobile(userDto.getMobile());
-        user.setGender(userDto.getGender());
-        user.setEmail(userDto.getEmail());
+//        user.setUsername(userDto.getUsername());
+//        user.setPassword(userDto.getPassword());
+//        user.setName(userDto.getName());
+//        user.setMobile(userDto.getMobile());
+//        user.setGender(userDto.getGender());
+//        user.setEmail(userDto.getEmail());
+//        user.setTime(new Date().toInstant());
+//        user.setRole(userDto.getRole());
+        BeanUtils.copyProperties(userDto, user);
         user.setTime(new Date().toInstant());
-        Company company = companyService.getCompanyById((long) userDto.getCompany_id());
+
+       /* Company company = companyService.getCompanyById(userDto.getCompany_id());
         if (company == null) {
             return R.error().message("无效的公司ID");
         }
-        user.setCompany(company);
+        user.setCompany(company);*/
         userService.saveUser(user);
         return R.OK().data("提示", "新增用户成功");
     }
@@ -56,13 +62,7 @@ public class UserController {
 //修改
     @PostMapping("/user/update")
     public R updateUser(@RequestBody UserDto userDto){
-        User user=new User();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(user.getPassword());
-        user.setGender(userDto.getGender());
-        user.setMobile(userDto.getMobile());
-        user.setEmail(userDto.getEmail());
-        userService.updateUser(userDto.getId(), user);
+        userService.updateUser(userDto.getId(), userDto);
         return R.OK().data("提示", "修改信息成功");
     }
 //查找
@@ -70,7 +70,7 @@ public class UserController {
 public R searchByListUser(@RequestParam(required = false) String username,
                           @RequestParam(required = false) Long mobile,
                           @RequestParam(required = false) Integer status,
-                          @RequestParam(required = false) LocalDateTime time) {
+                          @RequestParam(required = false) Instant time) {
     List<User> userList = userService.getAllUsers();
 
     if (username != null) {

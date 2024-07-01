@@ -4,15 +4,28 @@ import java.time.Instant;
 
 public class UserDto {
 
-    private long id;
+    private Long id;
     private String username;
     private String password;
     private String name;
     private Long mobile;
     private String gender;
     private String email;
-    private int company_id;
+    private Long company_id;
+    private Byte status;
+    private Byte role;
+    private String remark;
+    private String departmentName;
+    private String postName;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -20,6 +33,14 @@ public class UserDto {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -54,27 +75,51 @@ public class UserDto {
         this.email = email;
     }
 
-    public int getCompany_id() {
+    public Long getCompany_id() {
         return company_id;
     }
 
-    public void setCompany_id(int company_id) {
+    public void setCompany_id(Long company_id) {
         this.company_id = company_id;
     }
 
-    public String getPassword() {
-        return password;
+    public Byte getStatus() {
+        return status;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
-    public long getId() {
-        return id;
+    public Byte getRole() {
+        return role;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setRole(Byte role) {
+        this.role = role;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getPostName() {
+        return postName;
+    }
+
+    public void setPostName(String postName) {
+        this.postName = postName;
     }
 }

@@ -9,11 +9,13 @@ public class ClassCDto {
     private String introduction;
     private String author;
 
-    private String company_id;
-    private ClassVideoDto classVideos;
+    private Long company_id;
+   /* private ClassVideoDto classVideos;*/
 
- /*   private String classvideo.path;
-    private int classvideo_order;*/
+    private String classVideoPath;
+    private int classVideoOrder;
+    private int classVideoId;
+    private String classVideoTitle;
 
     public Long getId() {
         return id;
@@ -55,19 +57,47 @@ public class ClassCDto {
         this.author = author;
     }
 
-    public String getCompany_id() {
+
+
+
+
+    public Long getCompany_id() {
         return company_id;
     }
 
-    public void setCompany_id(String company_id) {
+    public void setCompany_id(Long company_id) {
         this.company_id = company_id;
     }
 
-    public ClassVideoDto getClassVideos() {
-        return classVideos;
+    public String getClassVideoPath() {
+        return classVideoPath;
     }
 
-    public void setClassVideos(ClassVideoDto classVideos) {
-        this.classVideos = classVideos;
+    public void setClassVideoPath(String classVideoPath) {
+        this.classVideoPath = classVideoPath;
+    }
+
+    public int getClassVideoOrder() {
+        return classVideoOrder;
+    }
+
+    public void setClassVideoOrder(int classVideoOrder) {
+        this.classVideoOrder = classVideoOrder;
+    }
+
+    public int getClassVideoId() {
+        return classVideoId;
+    }
+
+    public void setClassVideoId(int classVideoId) {
+        this.classVideoId = classVideoId;
+    }
+
+    public String getClassVideoTitle() {
+        return classVideoTitle;
+    }
+
+    public void setClassVideoTitle(String classVideoTitle) {
+        this.classVideoTitle = classVideoTitle;
     }
 }

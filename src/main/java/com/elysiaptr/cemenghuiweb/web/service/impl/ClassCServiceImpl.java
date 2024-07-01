@@ -3,6 +3,7 @@ package com.elysiaptr.cemenghuiweb.web.service.impl;
 import com.elysiaptr.cemenghuiweb.web.dto.ClassCDto;
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.web.po.ClassC;
+import com.elysiaptr.cemenghuiweb.web.po.ClassVideo;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.ClassCRepository;
 import com.elysiaptr.cemenghuiweb.web.service.ClassCService;
@@ -19,6 +20,10 @@ import java.util.stream.Collectors;
 public class ClassCServiceImpl implements ClassCService {
     @Autowired
     private ClassCRepository classCRepository;
+    @Autowired
+    private CompanyServiceImpl companyServiceImpl;
+    @Autowired
+    private ClassVideoServiceImpl classVideoServiceImpl;
 
     @Transactional
     @Override
@@ -28,16 +33,33 @@ public class ClassCServiceImpl implements ClassCService {
 
     @Transactional
     @Override
-    public ClassC updateClassC(Long id, ClassC classCDetails) {
+    public ClassC updateClassC(Long id, ClassCDto classCDetails) {
         ClassC classC = classCRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassC not found for this id :: " + id));
+        if(classCDetails.getName()!=null){
+            classC.setName(classCDetails.getName());
+        }
+        if(classCDetails.getImage()!=null){
+            classC.setImage(classCDetails.getImage());
+        }
+        if (classCDetails.getIntroduction()!=null){
+            classC.setIntroduction(classCDetails.getIntroduction());
+        }
+        if(classCDetails.getAuthor()!=null){
+            classC.setAuthor(classCDetails.getAuthor());
+        }
+        if(classCDetails.getCompany_id()!=null){
+            classC.setCompany(companyServiceImpl.getCompanyById(classCDetails.getCompany_id()));
+        }
+        if(classCDetails.getClassVideoOrder()!=0&&classCDetails.getClassVideoPath()!=null){
+            ClassVideo classVideo = new ClassVideo();
+            classVideo.setPath(classCDetails.getClassVideoPath());
+            classVideo.setOrder((short)classCDetails.getClassVideoOrder());
+            classVideo.setClassCField(classC);
+            classC.setClassVideo(classVideo);
+        }
 
-        classC.setName(classCDetails.getName());
-        classC.setImage(classCDetails.getImage());
-        classC.setIntroduction(classCDetails.getIntroduction());
-        classC.setAuthor(classCDetails.getAuthor());
-        classC.setCompany(classCDetails.getCompany());
-        classC.setClassVideo(classCDetails.getClassVideo());
+
 
         return classCRepository.save(classC);
     }

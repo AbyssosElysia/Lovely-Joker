@@ -3,6 +3,8 @@ package com.elysiaptr.cemenghuiweb.web.service.impl;
 import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.web.repo.DepartmentRepository;
+import com.elysiaptr.cemenghuiweb.web.repo.PostRepository;
 import com.elysiaptr.cemenghuiweb.web.repo.UserRepository;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import com.elysiaptr.cemenghuiweb.web.utils.BCryptUtil;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -22,6 +25,10 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
+    @Autowired
+    private PostRepository postRepository;
 
     @Transactional
     public User saveUser(User user) {
@@ -33,29 +40,49 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User updateUser(Long id, User userDetails) {
+    public User updateUser(Long id, UserDto userDetails) {
+        //原来存的对象
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
-
-        user.setUsername(userDetails.getUsername());
-        user.setName(userDetails.getName());
+/*        if(userDetails.getUsername()!=null){
+            user.setUsername(userDetails.getUsername());
+        }*/
+        if (userDetails.getName()!=null){
+            user.setName(userDetails.getName());
+        }
         // 加密密码
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             String encryptedPassword = BCryptUtil.encode(userDetails.getPassword());
             user.setPassword(encryptedPassword);
         }
-        user.setMobile(userDetails.getMobile());
-        user.setGender(userDetails.getGender());
-        user.setEmail(userDetails.getEmail());
-        user.setStatus(userDetails.getStatus());
+        if (userDetails.getMobile()!=null){
+            user.setMobile(userDetails.getMobile());
+        }
+        if (userDetails.getEmail()!=null){
+            user.setEmail(userDetails.getEmail());
+        }
+        if (userDetails.getGender()!=null){
+            user.setGender(userDetails.getGender());
+        }
+        if (userDetails.getStatus()!=null){
+            user.setStatus(userDetails.getStatus());
+        }
         user.setTime(null);
-        user.setRole(userDetails.getRole());
-        user.setRemark(userDetails.getRemark());
-        user.setDept(userDetails.getDept());
-        user.setPost(userDetails.getPost());
-        user.setCompany(userDetails.getCompany());
-        user.setMeetingsBeHold(userDetails.getMeetingsBeHold());
-        user.setMeetings(userDetails.getMeetings());
+        if (userDetails.getRole()!=null){
+            user.setRole(userDetails.getRole());
+        }
+        if(userDetails.getRemark()!=null){
+            user.setRemark(userDetails.getRemark());
+        }
+        if (departmentRepository.findByName(userDetails.getDepartmentName())!=null){
+            user.setDept(departmentRepository.findByName(userDetails.getDepartmentName()));
+        }
+        if (postRepository.findByName(userDetails.getPostName())!=null){
+            user.setPost(postRepository.findByName(userDetails.getPostName()));
+        }
+
+/*        user.setMeetingsBeHold(userDetails.getMeetingsBeHold());
+        user.setMeetings(userDetails.getMeetings());*/
 
         return userRepository.save(user);
     }
@@ -95,11 +122,10 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> Objects.equals(user.getStatus(), status.byteValue()))
                 .collect(Collectors.toList());
     }
-    public List<User> searchByTime(LocalDateTime time) {
+    public List<User> searchByTime(Instant time) {
         List<User> userList =null;
-        ZoneId zoneId = ZoneId.systemDefault(); // 获取当前系统时区
         return userList.stream()
-                .filter(user -> user.getTime().atZone(zoneId).toLocalDateTime().equals(time))
+                .filter(user -> user.getTime().equals(time))
                 .collect(Collectors.toList());
 
     }

@@ -4,13 +4,13 @@ package com.elysiaptr.cemenghuiweb.web.controller;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.ClassCDto;
 import com.elysiaptr.cemenghuiweb.web.dto.ClassVideoDto;
+import com.elysiaptr.cemenghuiweb.web.dto.NewsDto;
 import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
-import com.elysiaptr.cemenghuiweb.web.po.ClassC;
-import com.elysiaptr.cemenghuiweb.web.po.ClassVideo;
-import com.elysiaptr.cemenghuiweb.web.po.Company;
-import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.web.po.*;
 import com.elysiaptr.cemenghuiweb.web.service.ClassCService;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
+import com.elysiaptr.cemenghuiweb.web.service.impl.CompanyServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/classes/")
+@RequestMapping("/open_api/classes/")
 public class ClassController {
     @Autowired
     private ClassCService classCService;
     private CompanyService companyService;
+    @Autowired
+    private CompanyServiceImpl companyServiceImpl;
+
     //增
     @PostMapping("/add")
     public R add(@RequestBody ClassCDto classCDto) {
@@ -30,15 +33,18 @@ public class ClassController {
             return R.error().message("课程信息不能为空");
         }
         ClassC classC = new ClassC();
-        classC.setName(classCDto.getName());
-        classC.setImage(classCDto.getImage());
-        classC.setAuthor(classCDto.getAuthor());
-        classC.setIntroduction(classCDto.getIntroduction());
-        long companyId = Long.parseLong(classCDto.getCompany_id());
-        classC.setCompany(companyService.getCompanyById(companyId));
+        try{
+            BeanUtils.copyProperties(classCDto,classC);
+            classC.setCompany(companyServiceImpl.getCompanyById(classCDto.getCompany_id()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         ClassVideo classVideo = new ClassVideo();
-        classVideo.setPath(classCDto.getClassVideos().getPath());
-        classVideo.setOrder(classCDto.getClassVideos().getOrder());
+        classVideo.setPath(classCDto.getClassVideoPath());
+        classVideo.setOrder((short)classCDto.getClassVideoOrder());
+        classVideo.setTitle(classCDto.getClassVideoTitle());
+        classVideo.setId(classCDto.getId());
         classVideo.setClassCField(classC);
         classC.setClassVideo(classVideo);
         classCService.saveClassC(classC);
@@ -54,19 +60,7 @@ public class ClassController {
     //修改
     @PostMapping("/update")
     public R update(@RequestBody ClassCDto classCDto){
-        ClassC classC = new ClassC();
-        classC.setName(classCDto.getName());
-        classC.setImage(classCDto.getImage());
-        classC.setAuthor(classCDto.getAuthor());
-        classC.setIntroduction(classCDto.getIntroduction());
-        long companyId = Long.parseLong(classCDto.getCompany_id());
-        classC.setCompany(companyService.getCompanyById(companyId));
-        ClassVideo classVideo = new ClassVideo();
-        classVideo.setPath(classCDto.getClassVideos().getPath());
-        classVideo.setOrder(classCDto.getClassVideos().getOrder());
-        classVideo.setClassCField(classC);
-        classC.setClassVideo(classVideo);
-        classCService.updateClassC(classCDto.getId(),classC);
+        classCService.updateClassC(classCDto.getId(),classCDto);
         return R.OK().data("提示", "修改信息成功");
     }
     //查
@@ -85,7 +79,17 @@ public class ClassController {
     //查all
     @GetMapping("/search_all")
     public R searchAllClasses() {
-        List<ClassC> classCList=new ArrayList<>();
-        return R.OK().data("classCList", classCList);
+        List<ClassC> classList=classCService.getAllClassCs();
+        List<ClassCDto> classCDtos = new ArrayList<>();
+        for(ClassC classC:classList){
+            ClassCDto dto=new ClassCDto();
+            // dto.setId(news.getId());
+           dto.setId(classC.getId());
+           dto.setName(classC.getName());
+           dto.setIntroduction(classC.getIntroduction());
+            // dto.setCompany_name(news.getCompany().getName());
+            classCDtos.add(dto);
+        }
+        return R.OK().data("classCList", classCDtos);
     }
 }

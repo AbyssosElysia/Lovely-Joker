@@ -4,6 +4,7 @@ import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import org.springframework.data.domain.Page;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    User updateUser(Long id, User userDetails);
+    User updateUser(Long id, UserDto userDetails);
 
     void deleteUser(Long id);
 
@@ -32,7 +33,7 @@ public interface UserService {
 
     List<User> searchByStatus(Integer status);
 
-    List<User> searchByTime(LocalDateTime time);
+    List<User> searchByTime(Instant time);
 
     User getUserByUsername(String username);
 }

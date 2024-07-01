@@ -3,21 +3,29 @@ package com.elysiaptr.cemenghuiweb.web.controller;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.NewsDto;
 import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
+import com.elysiaptr.cemenghuiweb.web.po.Company;
 import com.elysiaptr.cemenghuiweb.web.po.News;
+import com.elysiaptr.cemenghuiweb.web.repo.CompanyRepository;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
 import com.elysiaptr.cemenghuiweb.web.service.MeetingService;
 import com.elysiaptr.cemenghuiweb.web.service.NewsService;
+import com.elysiaptr.cemenghuiweb.web.service.impl.CompanyServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/news")
+@RequestMapping("/open_api/news")
 public class NewsController {
     @Autowired
     private NewsService newsService;
+    @Autowired
     private CompanyService companyService;
+    @Autowired
+    private CompanyServiceImpl companyServiceImpl;
 
     @PostMapping("/add")
     public R addNews(@RequestBody NewsDto newsDto){
@@ -25,13 +33,22 @@ public class NewsController {
             return R.error().message("资讯信息不能为空");
         }
         News news=new News();
-        news.setTitle(newsDto.getTitle());
-        news.setImage(newsDto.getImage());
-        news.setContent(newsDto.getContent());
-        news.setAuthor(newsDto.getAuthor());
-        news.setIntroduction(newsDto.getIntroduction());
-        long companyId =Long.parseLong(newsDto.getCompany_id());
-        news.setCompany(companyService.getCompanyById((companyId)));
+        try {
+
+            BeanUtils.copyProperties(newsDto,news);
+            news.setCompany(companyServiceImpl.getCompanyById(newsDto.getCompany_id()));
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 通过 companyService 获取对应的 Company
+        //Long CompanyId=newsDto.getCompany_id();
+
+        Company company=companyService.getCompanyById(newsDto.getCompany_id());
+        if (company == null) {
+            return R.error().message("指定的公司不存在");
+        }
+
         newsService.saveNews(news);
         return R.OK().data("提示", "新增资讯成功");
     }
@@ -44,11 +61,7 @@ public class NewsController {
     //修改
     @PostMapping("/update")
     public R updateNews(@RequestBody NewsDto newsDto){
-        News news=new News();
-        news.setTitle(newsDto.getTitle());
-        news.setImage(newsDto.getImage());
-        news.setContent(newsDto.getContent());
-        newsService.updateNews(newsDto.getId(), news);
+        newsService.updateNews(newsDto.getId(), newsDto);
         return R.OK().data("提示", "修改信息成功");
     }
     //查找
@@ -75,7 +88,17 @@ public class NewsController {
     @GetMapping("/search_all")
     public R  searchAllNews(){
         List<News> newsList=newsService.getAllNews();
-        return R.OK().data("newsList", newsList);
+        List<NewsDto> newsDtos = new ArrayList<>();
+        for(News news:newsList){
+            NewsDto dto=new NewsDto();
+           // dto.setId(news.getId());
+            dto.setTitle(news.getTitle());
+            dto.setAuthor(news.getAuthor());
+            dto.setIntroduction(news.getIntroduction());
+           // dto.setCompany_name(news.getCompany().getName());
+            newsDtos.add(dto);
+        }
+        return R.OK().data("newsList", newsDtos);
     }
 
 }

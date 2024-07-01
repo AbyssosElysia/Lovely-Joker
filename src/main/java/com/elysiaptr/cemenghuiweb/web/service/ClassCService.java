@@ -9,7 +9,7 @@ import java.util.List;
 public interface ClassCService {
     ClassC saveClassC(ClassC classC);
 
-    ClassC updateClassC(Long id, ClassC classCDetails);
+    ClassC updateClassC(Long id, ClassCDto classCDetails);
 
     void deleteClassC(Long id);
 

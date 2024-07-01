@@ -1,8 +1,10 @@
 package com.elysiaptr.cemenghuiweb.web.service.impl;
 
+import com.elysiaptr.cemenghuiweb.web.dto.NewsDto;
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.web.po.News;
 import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.web.repo.CompanyRepository;
 import com.elysiaptr.cemenghuiweb.web.repo.NewsRepository;
 import com.elysiaptr.cemenghuiweb.web.service.NewsService;
 import jakarta.transaction.Transactional;
@@ -18,6 +20,10 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
     @Autowired
     private NewsRepository newsRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
+    private CompanyServiceImpl companyServiceImpl;
 
     @Transactional
     @Override
@@ -27,17 +33,27 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public News updateNews(Long id, News newsDetails) {
+    public News updateNews(Long id, NewsDto newsDetails) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("News not found for this id :: " + id));
-
-        news.setImage(newsDetails.getImage());
-        news.setTitle(newsDetails.getTitle());
-        news.setContent(newsDetails.getContent());
-        news.setAuthor(newsDetails.getAuthor());
-        news.setIntroduction(newsDetails.getIntroduction());
-        news.setCompany(newsDetails.getCompany());
-
+        if (newsDetails.getTitle() != null) {
+            news.setTitle(newsDetails.getTitle());
+        }
+        if (newsDetails.getContent() != null) {
+            news.setContent(newsDetails.getContent());
+        }
+        if (newsDetails.getAuthor() != null) {
+            news.setAuthor(newsDetails.getAuthor());
+        }
+        if (newsDetails.getImage()!=null){
+            news.setImage(newsDetails.getImage());
+        }
+        if (newsDetails.getIntroduction()!=null){
+            news.setIntroduction(newsDetails.getIntroduction());
+        }
+        if (newsDetails.getCompany_id()!=null){
+            news.setCompany(companyServiceImpl.getCompanyById(newsDetails.getCompany_id()));
+        }
         return newsRepository.save(news);
     }
 

@@ -6,9 +6,11 @@ import com.elysiaptr.cemenghuiweb.web.po.Company;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,6 +29,12 @@ public class CompanyController {
         company.setName(companyDto.getName());
         company.setLogo(companyDto.getLogo());
         company.setContact(companyDto.getContact());
+        Instant i = Instant.now();
+//        Instant a = Instant.from(LocalDateTime.now());
+//        System.out.println(a);
+        System.out.println(i);
+//        System.out.println(a);
+        company.setTime(i);
         company.setMobile(companyDto.getMobile());
         company.setRemark(companyDto.getRemark());
         companyService.saveCompany(company);
@@ -47,6 +55,9 @@ public class CompanyController {
         company.setLogo(companyDto.getLogo());
         company.setContact(companyDto.getContact());
         company.setMobile(companyDto.getMobile());
+        Instant i = Instant.now();
+        Instant a = Instant.from(LocalDateTime.now());
+        company.setTime(i);
         company.setRemark(companyDto.getRemark());
         companyService.updateCompany(company.getId(), company);
         return R.OK().data("提示", "修改公司成功");
