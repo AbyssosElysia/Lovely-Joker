@@ -1,7 +1,9 @@
 package com.elysiaptr.cemenghuiweb.web.controller;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
+import com.elysiaptr.cemenghuiweb.web.dto.NewsDto;
 import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.web.po.Company;
+import com.elysiaptr.cemenghuiweb.web.po.News;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.UserRepository;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,8 +97,20 @@ public R searchByListUser(@RequestParam(required = false) String username,
 //查all
 @GetMapping("/user/search_all")
 public R searchAllUser() {
-    List<User> userList = userService.getAllUsers();
-    return R.OK().data("userListAll", userList);
-
+    List<User> userList=userService.getAllUsers();
+    List<UserDto> userDtos = new ArrayList<>();
+    for(User user:userList){
+        UserDto dto=new UserDto();
+        // dto.setId(news.getId());
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setMobile(user.getMobile());
+        dto.setStatus(user.getStatus());
+        dto.setName(user.getName());
+        dto.setTime(user.getTime());
+        // dto.setCompany_name(news.getCompany().getName());
+        userDtos.add(dto);
+    }
+    return R.OK().data("newsList", userDtos);
     }
 }

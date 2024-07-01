@@ -17,6 +17,7 @@ public class UserDto {
     private String remark;
     private String departmentName;
     private String postName;
+    private Instant time;
 
 
     public Long getId() {
@@ -121,5 +122,13 @@ public class UserDto {
 
     public void setPostName(String postName) {
         this.postName = postName;
+    }
+
+    public Instant getTime() {
+        return time;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
     }
 }
