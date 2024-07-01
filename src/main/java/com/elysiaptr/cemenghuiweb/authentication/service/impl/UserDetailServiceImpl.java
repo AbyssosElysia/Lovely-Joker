@@ -1,7 +1,9 @@
 package com.elysiaptr.cemenghuiweb.authentication.service.impl;
 
 import com.elysiaptr.cemenghuiweb.authentication.dto.LoginUser;
-import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.authentication.dto.LoginUserDto;
+import com.elysiaptr.cemenghuiweb.authentication.dto.UserDto;
+//import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +24,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //        User user = userRepository.findByUsername(username);
-        User user1 = new User();
+        LoginUserDto user1 = new LoginUserDto();
         user1.setUsername("admin");
         user1.setPassword(passwordEncoder.encode("admin"));
         return new LoginUser(user1);

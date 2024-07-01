@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -78,7 +77,9 @@ public class WebSecurityConfig {
     }
 
 
-    /** 禁用不必要的默认filter，处理异常响应内容 */
+    /**
+     * 禁用不必要的默认filter，处理异常响应内容
+     */
     private void commonHttpSetting(HttpSecurity http) throws Exception {
         // 禁用SpringSecurity默认filter。这些filter都是非前后端分离项目的产物，用不上.
         // yml配置文件将日志设置DEBUG模式，就能看到加载了哪些filter

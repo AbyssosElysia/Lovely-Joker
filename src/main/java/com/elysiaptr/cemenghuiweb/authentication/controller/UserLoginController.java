@@ -1,18 +1,16 @@
 package com.elysiaptr.cemenghuiweb.authentication.controller;
 
+import com.elysiaptr.cemenghuiweb.authentication.dto.CompanyReturnDto;
+import com.elysiaptr.cemenghuiweb.authentication.dto.LoginUserDto;
 import com.elysiaptr.cemenghuiweb.authentication.dto.UserDto;
+import com.elysiaptr.cemenghuiweb.authentication.dto.UserReturnDto;
 import com.elysiaptr.cemenghuiweb.authentication.service.UserLoginService;
 import com.elysiaptr.cemenghuiweb.common.consts.RedisKeyPrefixes;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.common.utils.StringRedisUtils;
-import com.elysiaptr.cemenghuiweb.web.po.Company;
 import com.elysiaptr.cemenghuiweb.web.po.User;
-import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +32,7 @@ public class UserLoginController {
 
     @PostMapping("/username")
     public R login(@RequestBody UserDto userDto) {
-        User user = new User();
+        LoginUserDto user = new LoginUserDto();
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
         System.out.println(userDto.getCaptcha());
@@ -42,9 +40,34 @@ public class UserLoginController {
         String key = RedisKeyPrefixes.PREFIX_CAPTCHA + userDto.getUuid();
         if (StringUtils.hasLength(jwt) && userDto.getCaptcha().equals(stringRedisUtils.get(key))) {
             User thisUser = userService.getUserByUsername(user.getUsername());
+            UserReturnDto userReturnDto = new UserReturnDto();
+            userReturnDto.setId(thisUser.getId());
+            userReturnDto.setName(thisUser.getName());
+            userReturnDto.setUsername(thisUser.getUsername());
+            userReturnDto.setMobile(thisUser.getMobile());
+            userReturnDto.setGender(thisUser.getGender());
+            userReturnDto.setEmail(thisUser.getEmail());
+            userReturnDto.setStatus(thisUser.getStatus());
+            userReturnDto.setTime(thisUser.getTime());
+            userReturnDto.setRole(thisUser.getRole());
+            userReturnDto.setRemark(thisUser.getRemark());
+            userReturnDto.setDepartmentId(thisUser.getDept().getId());
+            userReturnDto.setDepartmentName(thisUser.getDept().getName());
+            userReturnDto.setCompanyId(thisUser.getCompany().getId());
+            userReturnDto.setCompanyName(thisUser.getCompany().getName());
+            userReturnDto.setPostId(thisUser.getPost().getId());
+            userReturnDto.setPostName(thisUser.getPost().getName());
+            CompanyReturnDto companyReturnDto = new CompanyReturnDto();
+            companyReturnDto.setId(thisUser.getCompany().getId());
+            companyReturnDto.setName(thisUser.getCompany().getName());
+            companyReturnDto.setMobile(thisUser.getCompany().getMobile());
+            companyReturnDto.setContact(thisUser.getCompany().getContact());
+            companyReturnDto.setLogo(thisUser.getCompany().getLogo());
+            companyReturnDto.setTime(thisUser.getCompany().getTime());
+            companyReturnDto.setRemark(thisUser.getCompany().getRemark());
             int authentication = thisUser.getRole();
             if (authentication == 0) {
-                return R.OK().message("Login success").data("token", jwt).data("user", thisUser).data("authentication", authentication).data("company", thisUser.getCompany());
+                return R.OK().message("Login success").data("token", jwt).data("user", userReturnDto).data("authentication", authentication).data("company", companyReturnDto);
             }
             return R.OK().message("Login success").data("token", jwt).data("user", thisUser).data("authentication", authentication);
         }
