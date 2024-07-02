@@ -1,4 +1,3 @@
-/*
 package com.elysiaptr.cemenghuiweb.web.controller;
 
 import com.elysiaptr.cemenghuiweb.common.entity.R;
@@ -64,7 +63,7 @@ public class NewsController {
         if (items != null && !items.isEmpty()) {
             for (Item1Dto item : items) {
                 News existingItem = newsService.getNewsById(item.getId());
-                if (existingItem != null && existingItem.getTitle().equals(item.g)) {
+                if (existingItem != null && existingItem.getTitle().equals(item.getTitle())){
                     // 调用服务层删除对应的 item
                     newsService.deleteNews(item.getId());
                 } else {
@@ -152,4 +151,3 @@ public class NewsController {
 
 
 }
-*/
