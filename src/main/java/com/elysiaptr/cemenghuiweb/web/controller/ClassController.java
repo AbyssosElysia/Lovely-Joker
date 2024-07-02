@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class ClassController {
     @Autowired
     private ClassCService classCService;
-    private CompanyService companyService;
     @Autowired
     private CompanyServiceImpl companyServiceImpl;
     @Autowired
@@ -89,46 +88,34 @@ public class ClassController {
     public R searchByList(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long id,
-            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String introduction,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
 
+
+        // 先进行筛选
         List<ClassC> classCList = classCService.getAllClassCs();
-
-        // Filter by name
-        if (name != null) {
-            classCList = classCList.stream()
-                    .filter(c -> c.getName().contains(name))
-                    .collect(Collectors.toList());
-        }
-
-        // Filter by id
-        if (id != null) {
-            classCList = classCList.stream()
-                    .filter(c -> c.getId().equals(id))
-                    .collect(Collectors.toList());
-        }
-
-        // Filter by description
-        if (description != null) {
-            classCList = classCList.stream()
-                    .filter(c -> c.getIntroduction().contains(description))
-                    .collect(Collectors.toList());
-        }
-
-        // Paginate the results
+       if(name!=null){
+           classCList=classCService.searchClassByName(name);
+       }
+       if(id!=null){
+           classCList=classCService.searchClassById(id);
+       }
+       if(introduction!=null){
+           classCList=classCService.searchClassByIntroduction(introduction);
+       }
+        // 再进行分页
         Pageable pageable = PageRequest.of(page, size);
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), classCList.size());
         List<ClassC> pageList = classCList.subList(start, end);
 
-        // Convert to ClassCDto for the response
         List<ClassCDto> classCDtos = pageList.stream()
-                .map(c -> {
+                .map(classC -> {
                     ClassCDto dto = new ClassCDto();
-                    dto.setId(c.getId());
-                    dto.setName(c.getName());
-                    dto.setIntroduction(c.getIntroduction());
+                    dto.setId(classC.getId());
+                    dto.setName(classC.getName());
+                    dto.setIntroduction(classC.getIntroduction());
                     return dto;
                 })
                 .collect(Collectors.toList());

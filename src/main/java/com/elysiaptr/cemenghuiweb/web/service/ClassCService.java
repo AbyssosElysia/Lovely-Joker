@@ -26,4 +26,6 @@ public interface ClassCService {
     ClassCDto toDto(ClassC classC);
 
     ClassC toClass(ClassCDto classCDto);
+
+    List<ClassC> searchClassByIntroduction(String introduction);
 }
