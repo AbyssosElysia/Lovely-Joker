@@ -20,7 +20,7 @@ public interface NewsService {
     Page<News> getNewsByPage(int page, int size);
 
     List<News> searchNewsByTitle(String title);
-    List<News> searchNewsById(long id);
+    List<News> searchNewsById(Long id);
     List<News> searchNewsByIntroduction(String introduction);
     List<News> searchNewsByAuthor(String author);
 

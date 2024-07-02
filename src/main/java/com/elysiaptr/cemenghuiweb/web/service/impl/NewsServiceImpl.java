@@ -82,28 +82,28 @@ public class NewsServiceImpl implements NewsService {
     }
     @Override
     public List<News> searchNewsByTitle(String title){
-        List<News> newsList =null;
+        List<News> newsList =newsRepository.findAll();
         return newsList.stream()
                 .filter(news -> news.getTitle().contains(title))
                 .collect(Collectors.toList());
     }
     @Override
     public List<News> searchNewsByAuthor(String author){
-        List<News> newsList =null;
+        List<News> newsList =newsRepository.findAll();
         return newsList.stream()
                 .filter(news -> news.getAuthor().contains(author))
                 .collect(Collectors.toList());
     }
     @Override
     public List<News> searchNewsByIntroduction(String introduction){
-        List<News> newsList =null;
+        List<News> newsList =newsRepository.findAll();
         return newsList.stream()
                 .filter(news -> news.getIntroduction().contains(introduction))
                 .collect(Collectors.toList());
     }
     @Override
-    public List<News> searchNewsById(long id){
-        List<News> newsList =null;
+    public List<News> searchNewsById(Long id){
+        List<News> newsList =newsRepository.findAll();
         return newsList.stream()
                 .filter(news -> news.getId().equals(id))
                 .collect(Collectors.toList());

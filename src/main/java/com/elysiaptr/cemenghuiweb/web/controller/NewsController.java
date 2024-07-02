@@ -94,24 +94,16 @@ public class NewsController {
         // 先进行筛选
         List<News> newsList = newsService.getAllNews();
         if (title != null) {
-            newsList = newsList.stream()
-                    .filter(news -> news.getTitle().contains(title))
-                    .collect(Collectors.toList());
+            newsList = newsService.searchNewsByTitle(title);
         }
         if (id != null) {
-            newsList = newsList.stream()
-                    .filter(news -> news.getId().equals(id))
-                    .collect(Collectors.toList());
+            newsList = newsService.searchNewsById(id);
         }
         if (author != null) {
-            newsList = newsList.stream()
-                    .filter(news -> news.getAuthor().contains(author))
-                    .collect(Collectors.toList());
+            newsList = newsService.searchNewsByAuthor(author);
         }
         if (introduction != null) {
-            newsList = newsList.stream()
-                    .filter(news -> news.getIntroduction().contains(introduction))
-                    .collect(Collectors.toList());
+            newsList = newsService.searchNewsByIntroduction(introduction);
         }
 
         // 再进行分页
