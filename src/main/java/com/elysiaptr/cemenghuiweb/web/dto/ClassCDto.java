@@ -14,7 +14,7 @@ public class ClassCDto {
 
     private String classVideoPath;
     private int classVideoOrder;
-    private int classVideoId;
+
     private String classVideoTitle;
 
     public Long getId() {
@@ -85,13 +85,8 @@ public class ClassCDto {
         this.classVideoOrder = classVideoOrder;
     }
 
-    public int getClassVideoId() {
-        return classVideoId;
-    }
 
-    public void setClassVideoId(int classVideoId) {
-        this.classVideoId = classVideoId;
-    }
+
 
     public String getClassVideoTitle() {
         return classVideoTitle;

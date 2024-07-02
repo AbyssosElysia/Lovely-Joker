@@ -1,5 +1,6 @@
 package com.elysiaptr.cemenghuiweb.web.service;
 
+import com.elysiaptr.cemenghuiweb.web.dto.CompanyDto;
 import com.elysiaptr.cemenghuiweb.web.po.Company;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import org.springframework.data.domain.Page;
@@ -9,7 +10,7 @@ import java.util.List;
 public interface CompanyService {
     Company saveCompany(Company company);
 
-    Company updateCompany(Long id, Company companyDetails);
+    Company updateCompany(Long id, CompanyDto companyDetails);
 
     void deleteCompany(Long id);
 

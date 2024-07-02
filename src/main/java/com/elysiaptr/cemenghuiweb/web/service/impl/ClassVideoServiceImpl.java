@@ -50,6 +50,9 @@ public class ClassVideoServiceImpl implements ClassVideoService {
         return classVideoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClassVideo not found for this id :: " + id));
     }
+    public ClassVideo getClassVideoByOrder(int order) {
+        return classVideoRepository.findByOrder(order);
+    }
 
     @Override
     public List<ClassVideo> getAllClassVideos() {

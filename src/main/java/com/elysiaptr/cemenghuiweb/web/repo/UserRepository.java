@@ -7,5 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    User findByName(String name);
+
     User findByUsername(String username);
 }

@@ -1,5 +1,6 @@
 package com.elysiaptr.cemenghuiweb.web.service;
 
+import com.elysiaptr.cemenghuiweb.web.dto.MeetingDto;
 import com.elysiaptr.cemenghuiweb.web.po.Meeting;
 import org.springframework.data.domain.Page;
 
@@ -9,7 +10,7 @@ import java.util.List;
 public interface MeetingService {
     Meeting saveMeeting(Meeting meeting);
 
-    Meeting updateMeeting(Long id, Meeting meetingDetails);
+    Meeting updateMeeting(Long id, MeetingDto meetingDetails);
 
     void deleteMeeting(Long id);
 

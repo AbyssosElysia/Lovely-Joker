@@ -10,7 +10,6 @@ public class MeetingDto {
     private Byte status;
     private Instant startTime;
     private Instant endTime;
-
     private String holder;
 
     public Long getId() {

@@ -11,11 +11,15 @@ import java.util.List;
 @Table(name = "department", schema = "CeMengHui")
 public class Department {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 60)
     private String name;
+
+    @Column(name = "manager", nullable = false, length = 60)
+    private String manager;
 
     @Column(name = "mobile")
     private Long mobile;
@@ -34,9 +38,14 @@ public class Department {
     @Column(name = "time", nullable = false)
     private Instant time;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
+
+
+
+    @OneToMany(mappedBy = "fatherDept", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Department> sonDepartments;
 
     @OneToMany(mappedBy = "dept", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<User>();
@@ -129,4 +138,19 @@ public class Department {
         this.posts = posts;
     }
 
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
+    public List<Department> getSonDepartments() {
+        return sonDepartments;
+    }
+
+    public void setSonDepartments(List<Department> sonDepartments) {
+        this.sonDepartments = sonDepartments;
+    }
 }

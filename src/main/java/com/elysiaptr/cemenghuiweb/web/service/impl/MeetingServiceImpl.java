@@ -1,5 +1,6 @@
 package com.elysiaptr.cemenghuiweb.web.service.impl;
 
+import com.elysiaptr.cemenghuiweb.web.dto.MeetingDto;
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
 import com.elysiaptr.cemenghuiweb.web.po.Meeting;
 import com.elysiaptr.cemenghuiweb.web.repo.MeetingRepository;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 public class MeetingServiceImpl implements MeetingService {
     @Autowired
     private MeetingRepository meetingRepository;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @Transactional
     @Override
@@ -28,19 +31,30 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Transactional
     @Override
-    public Meeting updateMeeting(Long id, Meeting meetingDetails) {
+    public Meeting updateMeeting(Long id, MeetingDto meetingDetails) {
         Meeting meeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Meeting not found for this id :: " + id));
-
-        meeting.setName(meetingDetails.getName());
-        meeting.setContent(meetingDetails.getContent());
-        meeting.setImage(meetingDetails.getImage());
-        meeting.setStatus(meetingDetails.getStatus());
-        meeting.setStartTime(meetingDetails.getStartTime());
-        meeting.setEndTime(meetingDetails.getEndTime());
-        meeting.setHolder(meetingDetails.getHolder());
-        meeting.setUsers(meetingDetails.getUsers());
-
+        if(meetingDetails.getName()!=null){
+            meeting.setName(meetingDetails.getName());
+        }
+        if(meetingDetails.getStartTime()!=null){
+            meeting.setStartTime(meetingDetails.getStartTime());
+        }
+        if(meetingDetails.getEndTime()!=null){
+            meeting.setEndTime(meetingDetails.getEndTime());
+        }
+        if (meetingDetails.getImage()!=null){
+            meeting.setImage(meetingDetails.getImage());
+        }
+        if (meetingDetails.getContent()!=null){
+            meeting.setContent(meetingDetails.getContent());
+        }
+        if (meetingDetails.getStatus()!=null){
+            meeting.setStatus(meetingDetails.getStatus());
+        }
+        if (meetingDetails.getHolder()!=null){
+            meeting.setHolder(userServiceImpl.getUserByUsername(meetingDetails.getHolder()));
+        }
         return meetingRepository.save(meeting);
     }
 

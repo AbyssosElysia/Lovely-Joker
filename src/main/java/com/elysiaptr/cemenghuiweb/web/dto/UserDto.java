@@ -18,6 +18,8 @@ public class UserDto {
     private String departmentName;
     private String postName;
     private Instant time;
+    private int page;
+    private int size;
 
 
     public Long getId() {
@@ -130,5 +132,21 @@ public class UserDto {
 
     public void setTime(Instant time) {
         this.time = time;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

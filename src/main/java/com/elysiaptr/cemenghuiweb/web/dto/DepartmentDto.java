@@ -1,6 +1,10 @@
 package com.elysiaptr.cemenghuiweb.web.dto;
 
+import com.elysiaptr.cemenghuiweb.web.po.Department;
+
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DepartmentDto {
     private Long id;
@@ -9,9 +13,21 @@ public class DepartmentDto {
     private String email;
     private Byte status;
     private String leader;
+    private Long fatherDeptId;
+    private Long companyId;
+    private Instant time;
+    private CompanyDto company;
+    private List<DepartmentDto> departments;
+/*    private boolean hasSonDepartments; // 新增字段
+    private DepartmentDto parentDepartment;*/
 
-    private String fatherDept_id;
-    private String company_id;
+    public List<DepartmentDto> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(List<DepartmentDto> departments) {
+        this.departments = departments;
+    }
 
     public Long getId() {
         return id;
@@ -53,21 +69,7 @@ public class DepartmentDto {
         this.status = status;
     }
 
-    public String getFatherDept_id() {
-        return fatherDept_id;
-    }
 
-    public void setFatherDept_id(String fatherDept_id) {
-        this.fatherDept_id = fatherDept_id;
-    }
-
-    public String getCompany_id() {
-        return company_id;
-    }
-
-    public void setCompany_id(String company_id) {
-        this.company_id = company_id;
-    }
 
     public String getLeader() {
         return leader;
@@ -76,4 +78,49 @@ public class DepartmentDto {
     public void setLeader(String leader) {
         this.leader = leader;
     }
+
+
+    public Long getFatherDeptId() {
+        return fatherDeptId;
+    }
+
+    public void setFatherDeptId(Long fatherDeptId) {
+        this.fatherDeptId = fatherDeptId;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Instant getTime() {
+        return time;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
+    }
+
+    public CompanyDto getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyDto company) {
+        this.company = company;
+    }
+
+/*
+    public DepartmentDto DFS(Department department){
+        DepartmentDto dto = new DepartmentDto();
+        dto.setId(department.getId());
+        dto.setName(department.getName());
+        dto.setTime(department.getTime());
+        for(Department dept: department.getSonDepartments()){
+            departments.add(DFS(dept));
+        }
+        return dto;
+    }*/
 }

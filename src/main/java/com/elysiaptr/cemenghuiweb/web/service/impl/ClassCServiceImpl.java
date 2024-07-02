@@ -28,6 +28,8 @@ public class ClassCServiceImpl implements ClassCService {
     @Transactional
     @Override
     public ClassC saveClassC(ClassC classC) {
+        // 保存 ClassC 对象
+        System.out.println(classC);
         return classCRepository.save(classC);
     }
 
@@ -51,6 +53,7 @@ public class ClassCServiceImpl implements ClassCService {
         if(classCDetails.getCompany_id()!=null){
             classC.setCompany(companyServiceImpl.getCompanyById(classCDetails.getCompany_id()));
         }
+
         if(classCDetails.getClassVideoOrder()!=0&&classCDetails.getClassVideoPath()!=null){
             ClassVideo classVideo = new ClassVideo();
             classVideo.setPath(classCDetails.getClassVideoPath());
@@ -58,6 +61,10 @@ public class ClassCServiceImpl implements ClassCService {
             classVideo.setClassCField(classC);
             classC.setClassVideo(classVideo);
         }
+        if(classCDetails.getCompany_id()!=null){
+            classC.setCompany(companyServiceImpl.getCompanyById(classCDetails.getCompany_id()));
+        }
+
 
 
 

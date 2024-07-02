@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -30,11 +32,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public User saveUser(User user) {
         // 加密密码
-        String encryptedPassword = BCryptUtil.encode(user.getPassword());
-        user.setPassword(encryptedPassword);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -103,27 +107,27 @@ public class UserServiceImpl implements UserService {
 
 
     public List<User> searchByUsername(String username) {
-        List<User> userList =null;
+        List<User> userList =userRepository.findAll();
         return userList.stream()
                 .filter(user -> user.getUsername().contains(username))
                 .collect(Collectors.toList());
     }
     @Override
     public List<User> searchByMobile(Long mobile){
-        List<User> userList =null;
+        List<User> userList =userRepository.findAll();
         return userList.stream()
                 .filter(user -> user.getMobile().equals(mobile))
                 .collect(Collectors.toList());
     }
     @Override
     public List<User> searchByStatus(Integer status){
-        List<User> userList =null;
+        List<User> userList =userRepository.findAll();
         return userList.stream()
                 .filter(user -> Objects.equals(user.getStatus(), status.byteValue()))
                 .collect(Collectors.toList());
     }
     public List<User> searchByTime(Instant time) {
-        List<User> userList =null;
+        List<User> userList =userRepository.findAll();
         return userList.stream()
                 .filter(user -> user.getTime().equals(time))
                 .collect(Collectors.toList());
@@ -153,5 +157,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User getUserByName(String name) {
+        return userRepository.findByName(name);
     }
 }
