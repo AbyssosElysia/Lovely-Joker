@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 @RestController
@@ -134,9 +135,14 @@ public class DepartmentController {
                 })
                 .collect(Collectors.toList());*/
        // System.out.println( departmentService.searchDepartmentByCompany(company));
+
         for (Department department : departmentService.searchDepartmentByCompany(company)) {
-           DepartmentDto departmentDto = departmentService.DFS(department);
-           departments.add(departmentDto);
+            if (department.getFatherDept() == null) {
+                Stack<DepartmentDto> departmentDtoStack = new Stack<>();
+                DepartmentDto departmentDto = (DepartmentDto) departmentService.DFS(department, departmentDtoStack).get("department");
+                departments.add(departmentDto);
+            }
+
         }
         return R.OK().data("departmentList", departments);
     }

@@ -1,3 +1,4 @@
+/*
 package com.elysiaptr.cemenghuiweb.web.controller;
 
 import com.elysiaptr.cemenghuiweb.common.entity.R;
@@ -58,12 +59,12 @@ public class NewsController {
     }
     //删除
     @PostMapping("/delete")
-    public R deleteItems(@RequestBody ListDto listDto) {
-        List<ItemDto> items = listDto.getItems();
+    public R deleteItems(@RequestBody List1Dto listDto) {
+        List<Item1Dto> items = listDto.getItems();
         if (items != null && !items.isEmpty()) {
-            for (ItemDto item : items) {
+            for (Item1Dto item : items) {
                 News existingItem = newsService.getNewsById(item.getId());
-                if (existingItem != null && existingItem.getTitle().equals(item.getName())) {
+                if (existingItem != null && existingItem.getTitle().equals(item.g)) {
                     // 调用服务层删除对应的 item
                     newsService.deleteNews(item.getId());
                 } else {
@@ -151,3 +152,4 @@ public class NewsController {
 
 
 }
+*/

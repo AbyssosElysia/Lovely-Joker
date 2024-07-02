@@ -15,10 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,16 +106,31 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .collect(Collectors.toList());
     };
 */
+
     @Override
-    public DepartmentDto DFS(Department department){
+    public Map<String, Object> DFS(Department department, Stack<DepartmentDto> inputDepartmentDtoStack){
+        Map<String, Object> result = new HashMap<>();
         DepartmentDto dto = new DepartmentDto();
         dto.setId(department.getId());
         dto.setName(department.getName());
         dto.setTime(department.getTime());
-        for(Department dept: department.getSonDepartments()){
-            dto.getDepartments().add(DFS(dept));
+        List<DepartmentDto> departmentDtoList = new ArrayList<>();
+        dto.setDepartments(departmentDtoList);
+        inputDepartmentDtoStack.push(dto);
+        if (!department.getSonDepartments().isEmpty()){
+            for(Department dept: department.getSonDepartments()){
+                Map<String, Object> recentResult = DFS(dept, inputDepartmentDtoStack);
+                DepartmentDto recentDto = (DepartmentDto) recentResult.get("department");
+                Stack<DepartmentDto> recentDtoStack = (Stack<DepartmentDto>) recentResult.get("stack");
+                DepartmentDto nowDto = recentDtoStack.pop();
+                nowDto.getDepartments().add(recentDto);
+                recentDtoStack.push(nowDto);
+            }
         }
-        return dto;
+        inputDepartmentDtoStack.pop();
+        result.put("department", dto);
+        result.put("stack", inputDepartmentDtoStack);
+        return result;
     }
     @Override
     public List<Department> searchDepartmentByCompany(Company company){
