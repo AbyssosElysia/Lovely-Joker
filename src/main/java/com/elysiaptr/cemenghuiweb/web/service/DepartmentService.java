@@ -23,9 +23,9 @@ public interface DepartmentService {
 
     Page<Department> getDepartmentsByPage(int page, int size);
 
-    List<Department> searchDepartmentByStatus(byte status);
+    List<Department> searchDepartmentByStatus(List<Department> departmentList, Byte status);
 
-    List<Department> searchDepartmentByName(String name);
+    List<Department> searchDepartmentByName(List<Department> departmentList, String name);
     List<Department> searchDepartmentByCompany(Company company);
 
  //  Page<Department> getDepartmentsByCompany(Company company, Pageable pageable);

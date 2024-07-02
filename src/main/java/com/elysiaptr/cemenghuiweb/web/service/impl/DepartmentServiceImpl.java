@@ -84,15 +84,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentRepository.findAll(PageRequest.of(page, size));
     }
     @Override
-    public  List<Department> searchDepartmentByStatus(byte status){
-        List<Department> departmentList =departmentRepository.findAll();
+    public List<Department> searchDepartmentByStatus(List<Department> departmentList, Byte status) {
         return departmentList.stream()
                 .filter(department -> Objects.equals(department.getStatus(), status))
                 .collect(Collectors.toList());
     }
     @Override
-    public List<Department> searchDepartmentByName(String name){
-        List<Department> departmentList =departmentRepository.findAll();
+    public List<Department> searchDepartmentByName(List<Department> departmentList, String name) {
         return departmentList.stream()
                 .filter(department -> department.getName().contains(name))
                 .collect(Collectors.toList());

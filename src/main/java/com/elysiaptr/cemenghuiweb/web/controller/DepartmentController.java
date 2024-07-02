@@ -2,10 +2,7 @@ package com.elysiaptr.cemenghuiweb.web.controller;
 
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.*;
-import com.elysiaptr.cemenghuiweb.web.po.Company;
-import com.elysiaptr.cemenghuiweb.web.po.Department;
-import com.elysiaptr.cemenghuiweb.web.po.Meeting;
-import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.web.po.*;
 import com.elysiaptr.cemenghuiweb.web.repo.DepartmentRepository;
 import com.elysiaptr.cemenghuiweb.web.service.DepartmentService;
 import com.elysiaptr.cemenghuiweb.web.service.impl.CompanyServiceImpl;
@@ -93,27 +90,39 @@ public class DepartmentController {
 
     @GetMapping("/search_by_list")
     public R searchByListUser(@RequestParam(required = false) String name,
-                              @RequestParam(required = false) Byte status) {
+                              @RequestParam(required = false) Byte status,
+                              @RequestParam(required = false, defaultValue = "0") int page,
+                              @RequestParam(required = false, defaultValue = "10") int size) {
+
+        // 先进行筛选
         List<Department> departmentList = departmentService.getAllDepartments();
 
-        if (status != null) {
-            departmentList = departmentService.searchDepartmentByStatus(status);
-        }
+
         if (name != null) {
-            departmentList = departmentService.searchDepartmentByName(name);
+            departmentList=departmentService.searchDepartmentByName(departmentList,name);
+        }
+        if (status != null) {
+            departmentList=departmentService.searchDepartmentByStatus(departmentList,status);
         }
 
-        List<DepartmentDto> departmentDtos = departmentList.stream()
+        // 再进行分页
+        Pageable pageable = PageRequest.of(page, size);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), departmentList.size());
+        List<Department> pageList = departmentList.subList(start, end);
+
+        List<DepartmentDto> departmentDtos = pageList.stream()
                 .map(department -> {
                     DepartmentDto dto = new DepartmentDto();
-                    dto.setId(department.getId());
-                    dto.setName(department.getName());
                     dto.setStatus(department.getStatus());
+                    dto.setName(department.getName());
                     return dto;
                 })
                 .collect(Collectors.toList());
 
-        return R.OK().data("departmentList", departmentDtos);
+        Page<DepartmentDto> departmentDtoPage = new PageImpl<>(departmentDtos, pageable, departmentList.size());
+
+        return R.OK().data("departmentList", departmentDtoPage);
     }
 
     //查all
@@ -134,7 +143,7 @@ public class DepartmentController {
                     return dto;
                 })
                 .collect(Collectors.toList());*/
-       // System.out.println( departmentService.searchDepartmentByCompany(company));
+        // System.out.println( departmentService.searchDepartmentByCompany(company));
 
         for (Department department : departmentService.searchDepartmentByCompany(company)) {
             if (department.getFatherDept() == null) {
@@ -147,6 +156,9 @@ public class DepartmentController {
         return R.OK().data("departmentList", departments);
     }
 
+
 }
+
+
 
 
