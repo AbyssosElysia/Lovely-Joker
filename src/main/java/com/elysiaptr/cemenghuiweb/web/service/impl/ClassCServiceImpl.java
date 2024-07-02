@@ -107,16 +107,23 @@ public class ClassCServiceImpl implements ClassCService {
 
     @Override
     public  List<ClassC> searchClassByName(String name){
-        List<ClassC> classCList =null;
+        List<ClassC> classCList =classCRepository.findAll();
         return classCList.stream()
                 .filter(classC -> classC.getName().contains(name))
                 .collect(Collectors.toList());
     }
     @Override
     public List<ClassC> searchClassById(Long id){
-        List<ClassC> classCList =null;
+        List<ClassC> classCList =classCRepository.findAll();
         return classCList.stream()
                 .filter(classC -> classC.getId().equals(id))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public  List<ClassC> searchClassByIntroduction(String introduction){
+        List<ClassC> classCList =classCRepository.findAll();
+        return classCList.stream()
+                .filter(classC -> classC.getIntroduction().equals(introduction))
                 .collect(Collectors.toList());
     }
 }
