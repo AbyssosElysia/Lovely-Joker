@@ -116,9 +116,23 @@ public class UserController {
         int end = Math.min((start + pageable.getPageSize()), userList.size());
         List<User> pageList = userList.subList(start, end);
 
-        Page<User> userPage = new PageImpl<>(pageList, pageable, userList.size());
+        List<UserDto> userDtos = pageList.stream()
+                .map(user -> {
+                    UserDto dto = new UserDto();
+                    dto.setId(user.getId());
+                    dto.setName(user.getName());
+                    dto.setMobile(user.getMobile());
+                    dto.setUsername(user.getUsername());
+                    dto.setStatus(user.getStatus());
+                    dto.setTime(user.getTime());
+                    dto.setDepartmentName(user.getDept().getName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
 
-        return R.OK().data("userList", userPage);
+        Page<UserDto> userDtoPage = new PageImpl<>(userDtos, pageable, userList.size());
+
+        return R.OK().data("userList", userDtoPage);
     }
 //查all
 @GetMapping("/search_page")
