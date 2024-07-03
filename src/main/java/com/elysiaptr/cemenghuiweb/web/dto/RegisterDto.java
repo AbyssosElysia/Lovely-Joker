@@ -8,6 +8,7 @@ import java.time.Instant;
 public class RegisterDto {
     private String companyName;
     private String password;
+    private String to;
     private Long mobile;
     private String captcha;
     private String userName;

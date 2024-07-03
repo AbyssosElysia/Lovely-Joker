@@ -31,7 +31,7 @@ public class Department {
     @Column(name = "status", nullable = false)
     private Byte status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "father_dept_id")
     private Department fatherDept;
 
@@ -44,10 +44,10 @@ public class Department {
 
 
 
-    @OneToMany(mappedBy = "fatherDept", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fatherDept", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Department> sonDepartments;
 
-    @OneToMany(mappedBy = "dept", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dept", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<User>();
 
     @ManyToMany

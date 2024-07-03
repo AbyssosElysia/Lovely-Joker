@@ -25,10 +25,10 @@ public class ClassC {
     @Column(name = "author", length = 120)
     private String author;
 
-    @OneToOne(mappedBy = "classCField", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "classCField", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ClassVideo classVideo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
 

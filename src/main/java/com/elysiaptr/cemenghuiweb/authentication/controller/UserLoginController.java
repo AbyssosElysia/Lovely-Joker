@@ -8,7 +8,10 @@ import com.elysiaptr.cemenghuiweb.authentication.service.UserLoginService;
 import com.elysiaptr.cemenghuiweb.common.consts.RedisKeyPrefixes;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.common.utils.StringRedisUtils;
+import com.elysiaptr.cemenghuiweb.web.po.SuperAdmin;
 import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.web.repo.SuperAdminRepository;
+import com.elysiaptr.cemenghuiweb.web.service.SuperAdminService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -30,14 +33,24 @@ public class UserLoginController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    SuperAdminRepository superAdminRepository;
+
     @PostMapping("/username")
     public R login(@RequestBody UserDto userDto) {
+        String key = RedisKeyPrefixes.PREFIX_CAPTCHA + userDto.getUuid();
+        SuperAdmin superAdmin = superAdminRepository.findByUsername(userDto.getUsername());
+        if (superAdmin != null && userDto.getCaptcha().equals(stringRedisUtils.get(key))) {
+            if (superAdmin.getPassword().equals(userDto.getPassword())) {
+                return R.OK().message("Login success").data("user", superAdmin.getId()).data("authentication", 2);
+            }
+            return R.notFound().message("Login failed");
+        }
         LoginUserDto user = new LoginUserDto();
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
         System.out.println(userDto.getCaptcha());
         String jwt = userLoginService.login(user);
-        String key = RedisKeyPrefixes.PREFIX_CAPTCHA + userDto.getUuid();
         if (StringUtils.hasLength(jwt) && userDto.getCaptcha().equals(stringRedisUtils.get(key))) {
             User thisUser = userService.getUserByUsername(user.getUsername());
             UserReturnDto userReturnDto = new UserReturnDto();
@@ -67,9 +80,9 @@ public class UserLoginController {
             companyReturnDto.setRemark(thisUser.getCompany().getRemark());
             int authentication = thisUser.getRole();
             if (authentication == 0) {
-                return R.OK().message("Login success").data("token", jwt).data("user", userReturnDto).data("authentication", authentication).data("company", companyReturnDto);
+                return R.OK().message("Login success").data("token", jwt).data("user", userReturnDto.getId()).data("authentication", 0);
             }
-            return R.OK().message("Login success").data("token", jwt).data("user", thisUser).data("authentication", authentication);
+            return R.OK().message("Login success").data("token", jwt).data("user", thisUser.getId()).data("authentication", 1);
         }
         stringRedisUtils.delete(key);
         return R.notFound().message("Login failed");

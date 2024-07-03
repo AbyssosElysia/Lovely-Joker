@@ -34,7 +34,7 @@ public class Meeting {
     @Column(name = "end_time", nullable = false)
     private Instant endTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "holder")
     private User holder;
 

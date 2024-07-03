@@ -25,7 +25,7 @@ public class News {
     @Column(name = "introduction", length = 480)
     private String introduction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
 
