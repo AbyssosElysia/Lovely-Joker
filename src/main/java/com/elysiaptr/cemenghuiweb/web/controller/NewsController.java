@@ -148,6 +148,80 @@ public class NewsController {
 
         return R.OK().data("newsList", newsDtoPage);
     }
+    @GetMapping("/applet_search_page")
+    public R searchAppletPage(@RequestParam(required = false, defaultValue = "0") int page,
+                        @RequestParam(required = false, defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<News> newsPage = newsService.getNewsByPage(pageable.getPageNumber(),pageable.getPageSize());
+
+        List<NewsDto> newsDtos = newsPage.getContent().stream()
+                .map(news -> {
+                    NewsDto dto = new NewsDto();
+                    dto.setId(news.getId());
+                    dto.setTitle(news.getTitle());
+                    dto.setAuthor(news.getAuthor());
+                    dto.setImage(news.getImage());
+                    dto.setContent(news.getContent());
+                    dto.setCompany_id(news.getCompany().getId());
+                    dto.setIntroduction(news.getIntroduction());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        Page<NewsDto> newsDtoPage = new PageImpl<>(newsDtos, pageable, newsPage.getTotalElements());
+
+        return R.OK().data("newsList", newsDtoPage);
+    }
+
+    //查找
+    @GetMapping("/applet_search_by_list")
+    public R searchAppletByListUser(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String introduction,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
+
+        // 先进行筛选
+        List<News> newsList = newsService.getAllNews();
+        if (title != null) {
+            newsList = newsService.searchNewsByTitle(title,newsList);
+        }
+        if (id != null) {
+            newsList = newsService.searchNewsById(id,newsList);
+        }
+        if (author != null) {
+            newsList = newsService.searchNewsByAuthor(author,newsList);
+        }
+        if (introduction != null) {
+            newsList = newsService.searchNewsByIntroduction(introduction,newsList);
+        }
+
+        // 再进行分页
+        Pageable pageable = PageRequest.of(page, size);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), newsList.size());
+        List<News> pageList = newsList.subList(start, end);
+
+        List<NewsDto> newsDtos = pageList.stream()
+                .map(news -> {
+                    NewsDto dto = new NewsDto();
+                    dto.setId(news.getId());
+                    dto.setTitle(news.getTitle());
+                    dto.setAuthor(news.getAuthor());
+                    dto.setIntroduction(news.getIntroduction());
+                    dto.setImage(news.getImage());
+                    dto.setContent(news.getContent());
+                    dto.setCompany_id(news.getCompany().getId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        Page<NewsDto> newsDtoPage = new PageImpl<>(newsDtos, pageable, newsList.size());
+
+        return R.OK().data("newsList", newsDtoPage);
+    }
 
     
 
