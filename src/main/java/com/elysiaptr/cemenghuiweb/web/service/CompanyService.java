@@ -20,9 +20,9 @@ public interface CompanyService {
 
     Page<Company> getCompaniesByPage(int page, int size);
 
-    List<Company> searchByCompanyId(Long id);
-    List<Company> searchByCompanyName(String name);
-    List<Company> searchByCompanyContact(String contact);
-    List<Company> searchByCompanyMobile(Long mobile);
+    List<Company> searchByCompanyId(Long id,List<Company> companyList);
+    List<Company> searchByCompanyName(String name,List<Company> companyList);
+    List<Company> searchByCompanyContact(String contact,List<Company> companyList);
+    List<Company> searchByCompanyMobile(Long mobile,List<Company> companyList);
 
 }

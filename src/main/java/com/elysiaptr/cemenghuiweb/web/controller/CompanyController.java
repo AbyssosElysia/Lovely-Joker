@@ -83,17 +83,17 @@ public class CompanyController {
         List<Company> companyList = companyService.getAllCompanies();
 
         if (companyName != null) {
-            companyList = companyService.searchByCompanyName(companyName);
+            companyList = companyService.searchByCompanyName(companyName,companyList);
 
         }
         if (mobile != null) {
-            companyList = companyService.searchByCompanyMobile(mobile);
+            companyList = companyService.searchByCompanyMobile(mobile,companyList);
         }
         if (contact != null) {
-            companyList = companyService.searchByCompanyContact(contact);
+            companyList = companyService.searchByCompanyContact(contact,companyList);
         }
         if (companyId != null) {
-            companyList = companyService.searchByCompanyId(companyId);
+            companyList = companyService.searchByCompanyId(companyId,companyList);
         }
 
         // 再进行分页

@@ -79,29 +79,29 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll(PageRequest.of(page, size));
     }
     @Override
-    public List<Company> searchByCompanyId(Long id) {
-        List<Company> companyList =companyRepository.findAll();
+    public List<Company> searchByCompanyId(Long id,List<Company> companyList) {
+
         return companyList.stream()
                 .filter(company -> company.getId().equals(id))
                 .collect(Collectors.toList());
     }
     @Override
-    public List<Company> searchByCompanyName(String name) {
-        List<Company> companyList =companyRepository.findAll();
+    public List<Company> searchByCompanyName(String name,List<Company> companyList) {
+
         return companyList.stream()
                 .filter(company -> company.getName().contains(name))
                 .collect(Collectors.toList());
     }
     @Override
-    public List<Company> searchByCompanyContact(String contact) {
-        List<Company> companyList =companyRepository.findAll();
+    public List<Company> searchByCompanyContact(String contact,List<Company> companyList) {
+
         return companyList.stream()
                 .filter(company -> company.getContact().contains(contact))
                 .collect(Collectors.toList());
     }
     @Override
-    public List<Company> searchByCompanyMobile(Long mobile) {
-        List<Company> companyList =companyRepository.findAll();
+    public List<Company> searchByCompanyMobile(Long mobile,List<Company> companyList) {
+
         return companyList.stream()
                 .filter(company -> company.getMobile().equals(mobile))
                 .collect(Collectors.toList());
