@@ -125,6 +125,31 @@ public class ClassController {
         return R.OK().data("classCList", classCDtoPage);
     }
     //查all
+    @GetMapping("/applet_search_page")
+    public R searchAppletPage(@RequestParam(required = false, defaultValue = "0") int page,
+                        @RequestParam(required = false, defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ClassC> classCPage = classCService.getClassCsByPage(pageable.getPageNumber(),pageable.getPageSize());
+
+        List<ClassCDto> classCDtos =classCPage.getContent().stream()
+                .map(classC -> {
+                    ClassCDto dto = new ClassCDto();
+                    dto.setId(classC.getId());
+                    dto.setName(classC.getName());
+                    dto.setIntroduction(classC.getIntroduction());
+                    dto.setImage(classC.getImage());
+                    dto.setAuthor(classC.getAuthor());
+                    dto.setCompany_id(classC.getCompany().getId());
+
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        Page<ClassCDto> classCDtoPage = new PageImpl<>(classCDtos, pageable, classCPage.getTotalElements());
+
+        return R.OK().data("classCList", classCDtoPage);
+    }
     @GetMapping("/search_page")
     public R searchPage(@RequestParam(required = false, defaultValue = "0") int page,
                         @RequestParam(required = false, defaultValue = "10") int size) {
@@ -147,4 +172,50 @@ public class ClassController {
 
         return R.OK().data("classCList", classCDtoPage);
     }
+    @GetMapping("/applet_search_by_list")
+    public R searchAppletByList(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String introduction,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
+
+
+        // 先进行筛选
+        List<ClassC> classCList = classCService.getAllClassCs();
+        if(name!=null){
+            classCList=classCService.searchClassByName(name,classCList);
+        }
+        if(id!=null){
+            classCList=classCService.searchClassById(id,classCList);
+        }
+        if(introduction!=null){
+            classCList=classCService.searchClassByIntroduction(introduction,classCList);
+        }
+        // 再进行分页
+        Pageable pageable = PageRequest.of(page, size);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), classCList.size());
+        List<ClassC> pageList = classCList.subList(start, end);
+
+        List<ClassCDto> classCDtos = pageList.stream()
+                .map(classC -> {
+                    ClassCDto dto = new ClassCDto();
+                    dto.setId(classC.getId());
+                    dto.setName(classC.getName());
+                    dto.setIntroduction(classC.getIntroduction());
+                    dto.setImage(classC.getImage());
+                    dto.setAuthor(classC.getAuthor());
+                    dto.setCompany_id(classC.getCompany().getId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        Page<ClassCDto> classCDtoPage = new PageImpl<>(classCDtos, pageable, classCList.size());
+
+        return R.OK().data("classCList", classCDtoPage);
+    }
+
+
+
 }
