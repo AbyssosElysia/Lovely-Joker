@@ -207,6 +207,9 @@ public class ClassController {
                     dto.setImage(classC.getImage());
                     dto.setAuthor(classC.getAuthor());
                     dto.setCompany_id(classC.getCompany().getId());
+                    dto.setClassVideoPath(classC.getClassVideo().getPath());
+                    dto.setClassVideoOrder(classC.getClassVideo().getOrder());
+                    dto.setClassVideoTitle(classC.getClassVideo().getTitle());
                     return dto;
                 })
                 .collect(Collectors.toList());

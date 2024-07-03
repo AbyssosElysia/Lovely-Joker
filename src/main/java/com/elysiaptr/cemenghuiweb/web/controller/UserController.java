@@ -1,14 +1,13 @@
 package com.elysiaptr.cemenghuiweb.web.controller;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
-import com.elysiaptr.cemenghuiweb.web.dto.ItemDto;
-import com.elysiaptr.cemenghuiweb.web.dto.ListDto;
-import com.elysiaptr.cemenghuiweb.web.dto.NewsDto;
-import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
+import com.elysiaptr.cemenghuiweb.web.dto.*;
 import com.elysiaptr.cemenghuiweb.web.po.Company;
+import com.elysiaptr.cemenghuiweb.web.po.Department;
 import com.elysiaptr.cemenghuiweb.web.po.News;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.UserRepository;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
+import com.elysiaptr.cemenghuiweb.web.service.DepartmentService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +22,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/open_api/user")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private CompanyService companyService;
+    @Autowired
+    private DepartmentService departmentService;
 //新增
     @PostMapping("/add")
 
@@ -160,4 +164,35 @@ public R searchPage(@RequestParam(required = false, defaultValue = "0") int page
 
     return R.OK().data("userList", userDtoPage);
     }
+
+    @GetMapping("/search_tree")
+    public R searchAllDepartment(@RequestParam(required = true) Long companyId) {
+        //获取公司的部门{
+        Company company = companyService.getCompanyById(companyId);
+        List<DepartmentDto> departments=new ArrayList<DepartmentDto>();
+       /* List<DepartmentDto> departmentDtos = departmentService.searchDepartmentByCompany(company).stream()
+                .map(department -> {
+                    DepartmentDto dto = new DepartmentDto();
+                    dto.setId(department.getId());
+                    dto.setName(department.getName());
+                    dto.setStatus(department.getStatus());
+                    return dto;
+                })
+                .collect(Collectors.toList());*/
+        // System.out.println( departmentService.searchDepartmentByCompany(company));
+
+        for (Department department : departmentService.searchDepartmentByCompany(company)) {
+            if (department.getFatherDept() == null) {
+                Stack<DepartmentDto> departmentDtoStack = new Stack<>();
+                DepartmentDto departmentDto = (DepartmentDto) departmentService.DFS(department, departmentDtoStack).get("department");
+                departments.add(departmentDto);
+            }
+
+        }
+        return R.OK().data("departmentList", departments);
+    }
+
+
+
+
 }

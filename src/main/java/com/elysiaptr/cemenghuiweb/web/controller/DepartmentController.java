@@ -93,7 +93,6 @@ public class DepartmentController {
                               @RequestParam(required = false) Byte status,
                               @RequestParam(required = false, defaultValue = "0") int page,
                               @RequestParam(required = false, defaultValue = "10") int size) {
-
         // 先进行筛选
         List<Department> departmentList = departmentService.getAllDepartments();
 
