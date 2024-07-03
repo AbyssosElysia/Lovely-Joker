@@ -27,13 +27,13 @@ public interface UserService {
 
     UserDto convertToDTO(User user);
 
-    List<User> searchByUsername(String username);
+    List<User> searchByUsername(String username,List<User> userList);
 
-    List<User> searchByMobile(Long mobile);
+    List<User> searchByMobile(Long mobile,List<User> userList);
 
-    List<User> searchByStatus(Integer status);
+    List<User> searchByStatus(Integer status,List<User> userList);
 
-    List<User> searchByTime(Instant time);
+    List<User> searchByTime(Instant time,List<User> userList);
 
     User getUserByUsername(String username);
     User getUserByName(String name);

@@ -106,28 +106,27 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public List<User> searchByUsername(String username) {
-        List<User> userList =userRepository.findAll();
+    public List<User> searchByUsername(String username,List<User> userList) {
         return userList.stream()
                 .filter(user -> user.getUsername().contains(username))
                 .collect(Collectors.toList());
     }
     @Override
-    public List<User> searchByMobile(Long mobile){
-        List<User> userList =userRepository.findAll();
+    public List<User> searchByMobile(Long mobile,List<User> userList){
+
         return userList.stream()
                 .filter(user -> user.getMobile().equals(mobile))
                 .collect(Collectors.toList());
     }
     @Override
-    public List<User> searchByStatus(Integer status){
-        List<User> userList =userRepository.findAll();
+    public List<User> searchByStatus(Integer status,List<User> userList){
+
         return userList.stream()
                 .filter(user -> Objects.equals(user.getStatus(), status.byteValue()))
                 .collect(Collectors.toList());
     }
-    public List<User> searchByTime(Instant time) {
-        List<User> userList =userRepository.findAll();
+    public List<User> searchByTime(Instant time,List<User> userList) {
+
         return userList.stream()
                 .filter(user -> user.getTime().equals(time))
                 .collect(Collectors.toList());

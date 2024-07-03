@@ -97,17 +97,18 @@ public class UserController {
 
         // 先进行筛选
         List<User> userList = userService.getAllUsers();
+        Object List;
         if (username != null) {
-            userList = userService.searchByUsername(username);
+            userList = userService.searchByUsername(username, userList);
         }
         if (mobile != null) {
-            userList = userService.searchByMobile(mobile);
+            userList = userService.searchByMobile(mobile, userList);
         }
         if (status != null) {
-            userList = userService.searchByStatus(status);
+            userList = userService.searchByStatus(status, userList);
         }
         if (time != null) {
-            userList = userService.searchByTime(time);
+            userList = userService.searchByTime(time, userList);
         }
 
         // 再进行分页
