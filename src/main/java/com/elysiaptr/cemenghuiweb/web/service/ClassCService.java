@@ -30,4 +30,5 @@ public interface ClassCService {
     List<ClassC> searchClassByIntroduction(String introduction,List<ClassC> classCList);
 
     List<ClassC> getClassesByIds(List<Long> ids);
+
 }

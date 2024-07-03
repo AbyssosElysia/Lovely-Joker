@@ -127,7 +127,7 @@ public class ClassCServiceImpl implements ClassCService {
                 .collect(Collectors.toList());
     }
     @Override
-    public List<ClassC> getClassCsByIds(List<Long> ids) {
+    public List<ClassC> getClassesByIds(List<Long> ids) {
         return classCRepository.findAllById(ids);
     }
 }

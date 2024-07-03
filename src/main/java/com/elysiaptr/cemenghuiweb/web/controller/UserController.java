@@ -1,4 +1,5 @@
 package com.elysiaptr.cemenghuiweb.web.controller;
+import com.alibaba.excel.EasyExcel;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.*;
 import com.elysiaptr.cemenghuiweb.web.po.Company;
@@ -15,8 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
+import java.io.ByteArrayOutputStream;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +29,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+import java.time.Instant;
+
+import com.alibaba.excel.EasyExcel;
+
+
+import java.io.ByteArrayOutputStream;
 @RestController
 @RequestMapping("/open_api/user")
 public class UserController {
@@ -192,6 +209,46 @@ public R searchPage(@RequestParam(required = false, defaultValue = "0") int page
         return R.OK().data("departmentList", departments);
     }
 
+    @PostMapping("/export")
+    public ResponseEntity<byte[]> exportUsers(@RequestBody List<Long> userIds) {
+        List<User> userList = userService.getUsersByIds(userIds);
+
+        // 将 User 列表转换为 UserExportDto 列表
+        List<UserDto> userDtos = userList.stream()
+                .map(user -> {
+                    UserDto dto = new UserDto();
+                    dto.setId(user.getId());
+                    dto.setName(user.getName());
+                    dto.setUsername(user.getUsername());
+                    dto.setDepartmentName(user.getDept().getName()); // 这里根据实际情况设置部门名称
+                    dto.setMobile(user.getMobile());
+                    dto.setStatus(user.getStatus());
+                    dto.setTime(user.getTime());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            // EasyExcel 写入数据到 Excel 文件
+            EasyExcel.write(outputStream, UserDto.class)
+                    .sheet("Users")
+                    .doWrite(userDtos);
+
+            byte[] excelBytes = outputStream.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "users.xlsx");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(excelBytes);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
 
 

@@ -25,4 +25,5 @@ public interface CompanyService {
     List<Company> searchByCompanyContact(String contact,List<Company> companyList);
     List<Company> searchByCompanyMobile(Long mobile,List<Company> companyList);
 
+    List<Company> getCompaniesByIds(List<Long> companyIds);
 }

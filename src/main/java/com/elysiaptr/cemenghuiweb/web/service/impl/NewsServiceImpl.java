@@ -108,5 +108,9 @@ public class NewsServiceImpl implements NewsService {
                 .filter(news -> news.getId().equals(id))
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<News> getNewsByIds(List<Long> newsIds){
+        return newsRepository.findAllById(newsIds);
+    }
 
 }

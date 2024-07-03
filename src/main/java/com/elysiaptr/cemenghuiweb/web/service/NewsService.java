@@ -24,4 +24,5 @@ public interface NewsService {
     List<News> searchNewsByIntroduction(String introduction,List<News> newsList);
     List<News> searchNewsByAuthor(String author,List<News> newsList);
 
+    List<News> getNewsByIds(List<Long> newsIds);
 }

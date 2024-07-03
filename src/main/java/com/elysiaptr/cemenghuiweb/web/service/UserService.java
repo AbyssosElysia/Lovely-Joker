@@ -37,5 +37,7 @@ public interface UserService {
 
     User getUserByUsername(String username);
     User getUserByName(String name);
+
+    List<User> getUsersByIds(List<Long> userIds);
 }
 

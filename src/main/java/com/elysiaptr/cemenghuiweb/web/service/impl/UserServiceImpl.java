@@ -2,6 +2,7 @@ package com.elysiaptr.cemenghuiweb.web.service.impl;
 
 import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
 import com.elysiaptr.cemenghuiweb.web.exception.ResourceNotFoundException;
+import com.elysiaptr.cemenghuiweb.web.po.Meeting;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.repo.DepartmentRepository;
 import com.elysiaptr.cemenghuiweb.web.repo.PostRepository;
@@ -161,5 +162,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByName(String name) {
         return userRepository.findByName(name);
+    }
+    @Override
+    public List<User> getUsersByIds(List<Long> ids) {
+        return userRepository.findAllById(ids);
     }
 }

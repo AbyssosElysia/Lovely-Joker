@@ -24,6 +24,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.time.Instant;
+import com.alibaba.excel.EasyExcel;
+import java.io.ByteArrayOutputStream;
+
 @RestController
 @RequestMapping("/open_api/company")
 public class CompanyController {
@@ -219,6 +231,44 @@ public class CompanyController {
 
         return R.OK().data("companyList", companyDtoPage);
     }
+    @PostMapping("/export")
+    public ResponseEntity<byte[]> exportCompanies(@RequestBody List<Long> companyIds) {
+        List<Company> companyList = companyService.getCompaniesByIds(companyIds);
 
+        // 将 Company 列表转换为 CompanyExportDto 列表
+        List<CompanyDto> companyDtos = companyList.stream()
+                .map(company -> {
+                    CompanyDto dto = new CompanyDto();
+                    dto.setId(company.getId());
+                    dto.setName(company.getName());
+                    dto.setMobile(company.getMobile());
+                    dto.setContact(company.getContact());
+                    dto.setAdminName(company.getContact());
+                    dto.setTime(company.getTime());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            // EasyExcel 写入数据到 Excel 文件
+            EasyExcel.write(outputStream, CompanyDto.class)
+                    .sheet("Companies")
+                    .doWrite(companyDtos);
+
+            byte[] excelBytes = outputStream.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "companies.xlsx");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(excelBytes);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
 }

@@ -106,4 +106,8 @@ public class CompanyServiceImpl implements CompanyService {
                 .filter(company -> company.getMobile().equals(mobile))
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<Company> getCompaniesByIds(List<Long> companyIds){
+        return companyRepository.findAllById(companyIds);
+    }
 }
