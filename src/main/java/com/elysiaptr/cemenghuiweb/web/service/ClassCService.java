@@ -19,13 +19,13 @@ public interface ClassCService {
 
     Page<ClassC> getClassCsByPage(int page, int size);
 
-    List<ClassC> searchClassByName(String name);
+    List<ClassC> searchClassByName(String name,List<ClassC> classCList);
 
-    List<ClassC> searchClassById(Long id);
+    List<ClassC> searchClassById(Long id,List<ClassC> classCList);
 
     ClassCDto toDto(ClassC classC);
 
     ClassC toClass(ClassCDto classCDto);
 
-    List<ClassC> searchClassByIntroduction(String introduction);
+    List<ClassC> searchClassByIntroduction(String introduction,List<ClassC> classCList);
 }

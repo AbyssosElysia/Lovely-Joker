@@ -96,13 +96,13 @@ public class ClassController {
         // 先进行筛选
         List<ClassC> classCList = classCService.getAllClassCs();
        if(name!=null){
-           classCList=classCService.searchClassByName(name);
+           classCList=classCService.searchClassByName(name,classCList);
        }
        if(id!=null){
-           classCList=classCService.searchClassById(id);
+           classCList=classCService.searchClassById(id,classCList);
        }
        if(introduction!=null){
-           classCList=classCService.searchClassByIntroduction(introduction);
+           classCList=classCService.searchClassByIntroduction(introduction,classCList);
        }
         // 再进行分页
         Pageable pageable = PageRequest.of(page, size);
