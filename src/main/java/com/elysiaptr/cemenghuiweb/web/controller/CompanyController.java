@@ -138,6 +138,37 @@ public class CompanyController {
         Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos, pageable, companyPage.getTotalElements());
 
         return R.OK().data("companyList", companyDtoPage);
+
+
+
     }
+    @GetMapping("/applet_search_page")
+    public R searchAppletPage(@RequestParam(required = false, defaultValue = "0") int page,
+                        @RequestParam(required = false, defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Company> companyPage = companyService.getCompaniesByPage(pageable.getPageNumber(),pageable.getPageSize());
+
+        List<CompanyDto> companyDtos = companyPage.getContent().stream()
+                .map(company -> {
+                    CompanyDto dto = new CompanyDto();
+                    dto.setId(company.getId());
+                    dto.setContact(company.getContact());
+                    dto.setName(company.getName());
+                    dto.setMobile(company.getMobile());
+                   // dto.setAdminName(company.getContact());
+                    dto.setRemark(company.getRemark());
+                    dto.setLogo(company.getLogo());
+                    Instant instant = Instant.now();
+                    dto.setTime(instant);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos, pageable, companyPage.getTotalElements());
+
+        return R.OK().data("companyList", companyDtoPage);
+    }
+
+
 
 }
