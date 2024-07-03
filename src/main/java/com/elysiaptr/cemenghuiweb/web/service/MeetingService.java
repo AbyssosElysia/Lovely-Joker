@@ -20,9 +20,9 @@ public interface MeetingService {
 
     Page<Meeting> getMeetingsByPage(int page, int size);
 
-    List<Meeting> searchMeetingByName(String name);
+    List<Meeting> searchMeetingByName(String name,List<Meeting> meetingList);
 
-    List<Meeting> searchMeetingByHolder(String holder);
+    List<Meeting> searchMeetingByHolder(String holder,List<Meeting> meetingList);
 
-    List<Meeting> searchMeetingByStartTime(Instant startTime);
+    List<Meeting> searchMeetingByStartTime(Instant startTime,List<Meeting> meetingList);
 }

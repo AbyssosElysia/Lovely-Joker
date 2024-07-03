@@ -83,13 +83,13 @@ public class MeetingController {
         List<Meeting> meetingList = meetingService.getAllMeetings();
 
         if (name != null) {
-            meetingList = meetingService.searchMeetingByName(name);
+            meetingList = meetingService.searchMeetingByName(name,meetingList);
         }
         if (holder != null) {
-            meetingList = meetingService.searchMeetingByHolder(holder);
+            meetingList = meetingService.searchMeetingByHolder(holder,meetingList);
         }
         if (startTime != null) {
-            meetingList = meetingService.searchMeetingByStartTime(startTime);
+            meetingList = meetingService.searchMeetingByStartTime(startTime,meetingList);
         }
 
         // 分页

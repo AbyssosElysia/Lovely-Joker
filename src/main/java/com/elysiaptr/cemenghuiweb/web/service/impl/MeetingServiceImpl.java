@@ -83,27 +83,25 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<Meeting> searchMeetingByName(String name) {
-        List<Meeting> meetingList=null;
+    public List<Meeting> searchMeetingByName(String name,List<Meeting> meetingList) {
         return meetingList.stream()
                 .filter(meeting -> meeting.getName().contains(name))
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Meeting> searchMeetingByHolder(String holder) {
-        List<Meeting> meetingList=null;
+    public List<Meeting> searchMeetingByHolder(String holder,List<Meeting> meetingList) {
+
         return meetingList.stream()
-                .filter(meeting -> meeting.getHolder().equals(holder))
-                .collect(Collectors.toUnmodifiableList());
+                .filter(meeting -> meeting.getHolder().getName().equals(holder))
+                .collect(Collectors.toList());
 
     }
     @Override
-    public List<Meeting> searchMeetingByStartTime(Instant startTime){
-        List<Meeting> meetingList=null;
+    public List<Meeting> searchMeetingByStartTime(Instant startTime,List<Meeting> meetingList){
         return meetingList.stream()
                 .filter(meeting -> meeting.getStartTime().equals(startTime))
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
     }
 
 
