@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/open_api/classes/")
+@RequestMapping("/open_api/classes")
 public class ClassController {
     @Autowired
     private ClassCService classCService;
