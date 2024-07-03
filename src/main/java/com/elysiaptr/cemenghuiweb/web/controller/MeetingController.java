@@ -1,13 +1,13 @@
 package com.elysiaptr.cemenghuiweb.web.controller;
 
 import com.elysiaptr.cemenghuiweb.common.entity.R;
-import com.elysiaptr.cemenghuiweb.web.dto.ItemDto;
-import com.elysiaptr.cemenghuiweb.web.dto.ListDto;
-import com.elysiaptr.cemenghuiweb.web.dto.MeetingDto;
-import com.elysiaptr.cemenghuiweb.web.dto.NewsDto;
+import com.elysiaptr.cemenghuiweb.web.dto.*;
+import com.elysiaptr.cemenghuiweb.web.po.ClassC;
 import com.elysiaptr.cemenghuiweb.web.po.Meeting;
 import com.elysiaptr.cemenghuiweb.web.po.News;
+import com.elysiaptr.cemenghuiweb.web.service.ClassCService;
 import com.elysiaptr.cemenghuiweb.web.service.MeetingService;
+import com.elysiaptr.cemenghuiweb.web.service.NewsService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import com.elysiaptr.cemenghuiweb.web.service.impl.UserServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -17,19 +17,34 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import java.time.Instant;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+
+import java.time.Instant;
+
+import com.alibaba.excel.EasyExcel;
+
+
+import java.io.ByteArrayOutputStream;
+
 
 @RestController
 @RequestMapping("/open_api/meeting")
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
+    @Autowired
     private UserService userService;
     @Autowired
     private UserServiceImpl userServiceImpl;
+    @Autowired
+    private ClassCService classCService;
 
     //新增
     @PostMapping("/add")
@@ -137,5 +152,81 @@ public class MeetingController {
 
         return R.OK().data("meetingList", meetingDtoPage);
     }
+    // 在 MeetingController 类中添加新的端点
+   /* @GetMapping("/export")
+    public ResponseEntity<byte[]> exportCourses() {
+        List<ClassC> classCList = classCService.getAllClassCs();
 
+        // 将 ClassC 列表转换为 ClassCDto 列表
+        List<ClassCDto> classCDtos = classCList.stream()
+                .map(classC -> {
+                    ClassCDto dto = new ClassCDto();
+                    dto.setId(classC.getId());
+                    dto.setName(classC.getName());
+                    dto.setIntroduction(classC.getIntroduction());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            // EasyExcel 写入数据到 Excel 文件
+            EasyExcel.write(outputStream)
+                    .head(ClassCDto.class) // 设置表头
+                    .sheet("Courses") // 设置 sheet 名称
+                    .doWrite(classCDtos); // 写入数据
+
+            byte[] excelBytes = outputStream.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "courses.xlsx");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(excelBytes);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }*/
+    @PostMapping("/export")
+    public ResponseEntity<byte[]> exportMeetings(@RequestBody List<Long> meetingIds) {
+        List<Meeting> meetingList = meetingService.getMeetingsByIds(meetingIds);
+
+        // 将 Meeting 列表转换为 MeetingDto 列表
+        List<MeetingDto> meetingDtos = meetingList.stream()
+                .map(meeting -> {
+                    MeetingDto dto = new MeetingDto();
+                    dto.setId(meeting.getId());
+                    dto.setName(meeting.getName());
+                    dto.setStatus(meeting.getStatus());
+                    dto.setHolder(meeting.getHolder().getName());
+                    dto.setContent(meeting.getContent());
+                    dto.setStartTime(meeting.getStartTime());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            // EasyExcel 写入数据到 Excel 文件
+            EasyExcel.write(outputStream, MeetingDto.class)
+                    .sheet("Meetings")
+                    .doWrite(meetingDtos);
+
+            byte[] excelBytes = outputStream.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "meetings.xlsx");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(excelBytes);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 }

@@ -28,4 +28,6 @@ public interface ClassCService {
     ClassC toClass(ClassCDto classCDto);
 
     List<ClassC> searchClassByIntroduction(String introduction,List<ClassC> classCList);
+
+    List<ClassC> getClassesByIds(List<Long> ids);
 }

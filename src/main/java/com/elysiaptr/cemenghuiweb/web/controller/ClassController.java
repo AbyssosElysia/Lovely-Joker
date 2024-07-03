@@ -1,6 +1,7 @@
 package com.elysiaptr.cemenghuiweb.web.controller;
 
 
+import com.alibaba.excel.EasyExcel;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.*;
 import com.elysiaptr.cemenghuiweb.web.po.*;
@@ -21,6 +22,8 @@ import org.apache.commons.csv.CSVPrinter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -225,10 +228,10 @@ public class ClassController {
 
         return R.OK().data("classCList", classCDtoPage);
     }
-    // 在 ClassController 类中添加新的端点
     @GetMapping("/export")
-    public ResponseEntity<byte[]> exportCourses() {
-        List<ClassC> classCList = classCService.getAllClassCs();
+    public ResponseEntity<byte[]> exportCourses(@RequestParam List<Long> ids) {
+        // 根据传入的 ID 列表获取课程信息
+        List<ClassC> classCList = classCService.getClassesByIds(ids);
 
         // 将 ClassC 列表转换为 ClassCDto 列表
         List<ClassCDto> classCDtos = classCList.stream()
@@ -241,32 +244,27 @@ public class ClassController {
                 })
                 .collect(Collectors.toList());
 
-        try (StringWriter writer = new StringWriter();
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("ID", "Name", "Introduction"))) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-            for (ClassCDto classCDto : classCDtos) {
-                csvPrinter.printRecord(
-                        classCDto.getId(),
-                        classCDto.getName(),
-                        classCDto.getIntroduction()
-                );
-            }
+            // EasyExcel 写入数据到 Excel 文件
+            EasyExcel.write(outputStream)
+                    .head(ClassCDto.class) // 设置表头
+                    .sheet("Courses") // 设置 sheet 名称
+                    .doWrite(classCDtos); // 写入数据
 
-            csvPrinter.flush();
-            byte[] csvBytes = writer.toString().getBytes();
+            byte[] excelBytes = outputStream.toByteArray();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", "courses.csv");
+            headers.setContentDispositionFormData("attachment", "courses.xlsx");
 
             return ResponseEntity.ok()
                     .headers(headers)
-                    .body(csvBytes);
+                    .body(excelBytes);
 
         } catch (IOException e) {
             return ResponseEntity.status(500).build();
         }
     }
-
-
 }
+

@@ -25,4 +25,6 @@ public interface MeetingService {
     List<Meeting> searchMeetingByHolder(String holder,List<Meeting> meetingList);
 
     List<Meeting> searchMeetingByStartTime(Instant startTime,List<Meeting> meetingList);
+
+    List<Meeting> getMeetingsByIds(List<Long> ids);
 }

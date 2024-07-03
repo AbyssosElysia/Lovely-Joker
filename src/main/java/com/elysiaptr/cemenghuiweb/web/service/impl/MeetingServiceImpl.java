@@ -103,6 +103,10 @@ public class MeetingServiceImpl implements MeetingService {
                 .filter(meeting -> meeting.getStartTime().equals(startTime))
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<Meeting> getMeetingsByIds(List<Long> ids) {
+        return meetingRepository.findAllById(ids);
+    }
 
 
 }
