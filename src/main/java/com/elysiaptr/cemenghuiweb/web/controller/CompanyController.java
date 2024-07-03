@@ -168,7 +168,57 @@ public class CompanyController {
 
         return R.OK().data("companyList", companyDtoPage);
     }
+    @GetMapping("/applet_search_by_list")
+    public R searchAppletByListCompany(
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) Long mobile,
+            @RequestParam(required = false) String contact,
+            @RequestParam(required = false) Long companyId,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
 
+        // 先进行筛选
+        List<Company> companyList = companyService.getAllCompanies();
+
+        if (companyName != null) {
+            companyList = companyService.searchByCompanyName(companyName,companyList);
+
+        }
+        if (mobile != null) {
+            companyList = companyService.searchByCompanyMobile(mobile,companyList);
+        }
+        if (contact != null) {
+            companyList = companyService.searchByCompanyContact(contact,companyList);
+        }
+        if (companyId != null) {
+            companyList = companyService.searchByCompanyId(companyId,companyList);
+        }
+
+        // 再进行分页
+        Pageable pageable = PageRequest.of(page, size);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), companyList.size());
+        List<Company> pageList = companyList.subList(start, end);
+
+        List<CompanyDto> companyDtos = pageList.stream()
+                .map(company -> {
+                    CompanyDto dto = new CompanyDto();
+                    dto.setId(company.getId());
+                    dto.setName(company.getName());
+                    dto.setMobile(company.getMobile());
+                    dto.setRemark(company.getRemark());
+                    dto.setLogo(company.getLogo());
+                    Instant instant = Instant.now();
+                    dto.setTime(instant);
+                    dto.setContact(company.getContact());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos, pageable, companyList.size());
+
+        return R.OK().data("companyList", companyDtoPage);
+    }
 
 
 }
