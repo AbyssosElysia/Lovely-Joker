@@ -19,9 +19,9 @@ public interface NewsService {
 
     Page<News> getNewsByPage(int page, int size);
 
-    List<News> searchNewsByTitle(String title);
-    List<News> searchNewsById(Long id);
-    List<News> searchNewsByIntroduction(String introduction);
-    List<News> searchNewsByAuthor(String author);
+    List<News> searchNewsByTitle(String title,List<News> newsList);
+    List<News> searchNewsById(Long id,List<News> newsList);
+    List<News> searchNewsByIntroduction(String introduction,List<News> newsList);
+    List<News> searchNewsByAuthor(String author,List<News> newsList);
 
 }

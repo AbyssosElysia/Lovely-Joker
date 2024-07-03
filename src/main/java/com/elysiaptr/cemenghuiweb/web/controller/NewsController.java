@@ -94,16 +94,16 @@ public class NewsController {
         // 先进行筛选
         List<News> newsList = newsService.getAllNews();
         if (title != null) {
-            newsList = newsService.searchNewsByTitle(title);
+            newsList = newsService.searchNewsByTitle(title,newsList);
         }
         if (id != null) {
-            newsList = newsService.searchNewsById(id);
+            newsList = newsService.searchNewsById(id,newsList);
         }
         if (author != null) {
-            newsList = newsService.searchNewsByAuthor(author);
+            newsList = newsService.searchNewsByAuthor(author,newsList);
         }
         if (introduction != null) {
-            newsList = newsService.searchNewsByIntroduction(introduction);
+            newsList = newsService.searchNewsByIntroduction(introduction,newsList);
         }
 
         // 再进行分页
