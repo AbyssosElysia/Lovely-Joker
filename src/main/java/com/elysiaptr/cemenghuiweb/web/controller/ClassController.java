@@ -16,6 +16,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import java.io.IOException;
+import java.io.StringWriter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,7 +225,48 @@ public class ClassController {
 
         return R.OK().data("classCList", classCDtoPage);
     }
+    // 在 ClassController 类中添加新的端点
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportCourses() {
+        List<ClassC> classCList = classCService.getAllClassCs();
 
+        // 将 ClassC 列表转换为 ClassCDto 列表
+        List<ClassCDto> classCDtos = classCList.stream()
+                .map(classC -> {
+                    ClassCDto dto = new ClassCDto();
+                    dto.setId(classC.getId());
+                    dto.setName(classC.getName());
+                    dto.setIntroduction(classC.getIntroduction());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        try (StringWriter writer = new StringWriter();
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("ID", "Name", "Introduction"))) {
+
+            for (ClassCDto classCDto : classCDtos) {
+                csvPrinter.printRecord(
+                        classCDto.getId(),
+                        classCDto.getName(),
+                        classCDto.getIntroduction()
+                );
+            }
+
+            csvPrinter.flush();
+            byte[] csvBytes = writer.toString().getBytes();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "courses.csv");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(csvBytes);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
 
 }
