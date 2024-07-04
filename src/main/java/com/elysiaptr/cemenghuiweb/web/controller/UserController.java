@@ -258,7 +258,68 @@ public R searchPage(@RequestParam(required = false, defaultValue = "0") int page
         userDto.setDepartmentName(user.getDept().getName());
         return R.OK().data("user", userDto);
     }
+    //搜索部门
+    /*@GetMapping("/search_department")
+    public R searchDepartment(@RequestParam String departmentName) {
+        //String departmentName = searchDto.getDepartmentName();
+        List<Company> companies = new ArrayList<>();
+        List<DepartmentDto> departments = new ArrayList<>();
 
+        // 获取所有公司
+        List<Company> allCompanies = companyService.getAllCompanies();
 
+        for (Company company : allCompanies) {
+            List<Department> companyDepartments = departmentService.searchDepartmentByCompany(company);
+
+            for (Department department : companyDepartments) {
+                if (department.getName().contains(departmentName)) {
+                    if (!companies.contains(company)) {
+                        companies.add(company);
+                    }
+
+                    // 构建部门树
+                    if (department.getFatherDept() == null) {
+                        Stack<DepartmentDto> departmentDtoStack = new Stack<>();
+                        DepartmentDto departmentDto = (DepartmentDto) departmentService.DFS(department, departmentDtoStack).get("department");
+                        departments.add(departmentDto);
+                    }
+                }
+            }
+        }
+
+        return R.OK().data("companyList", companies).data("departmentList", departments);
+    }
+
+*/
+    @GetMapping("/search_department")
+    public R searchDepartment(@RequestParam String departmentName) {
+        List<CompanyDto> companyDtos = new ArrayList<>();
+
+        // 获取所有公司
+        List<Company> allCompanies = companyService.getAllCompanies();
+
+        for (Company company : allCompanies) {
+            List<Department> companyDepartments = departmentService.searchDepartmentByCompany(company);
+            for (Department department : companyDepartments) {
+                if (department.getName().contains(departmentName)) {
+                    CompanyDto companyDto = new CompanyDto();
+                    companyDto.setId(company.getId());
+                    companyDto.setName(company.getName());
+
+                    DepartmentDto departmentDto = new DepartmentDto();
+                    departmentDto.setId(department.getId());
+                    departmentDto.setName(department.getName());
+                    departmentDto.setStatus(department.getStatus());
+
+                    companyDto.getDepartments().add(departmentDto);
+
+                    companyDtos.add(companyDto);
+                    break; // Assuming one department can belong to only one company
+                }
+            }
+        }
+
+        return R.OK().data("companyList", companyDtos);
+    }
 
 }

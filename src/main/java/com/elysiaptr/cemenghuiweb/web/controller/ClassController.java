@@ -70,6 +70,101 @@ public class ClassController {
         return R.OK().data("提示", "新增课程成功");
 
     }
+    /*绝对路径
+    @PostMapping("/add")
+    public R add(@RequestPart("classCDto") ClassCDto classCDto, @RequestPart("classVideoFile") MultipartFile classVideoFile) {
+        if (classCDto == null || classVideoFile == null || classVideoFile.isEmpty()) {
+            return R.error().message("课程信息和视频文件不能为空");
+        }
+
+        // 检查文件类型
+        if (!classVideoFile.getContentType().equals("video/mp4")) {
+            return R.error().message("只允许上传MP4格式的视频");
+        }
+
+        ClassC classC = new ClassC();
+        try {
+            // 复制 DTO 属性到实体类
+            BeanUtils.copyProperties(classCDto, classC);
+            classC.setCompany(companyServiceImpl.getCompanyById(classCDto.getCompany_id()));
+            classC.setClassVideo(classVideoServiceImpl.getClassVideoByOrder(classCDto.getClassVideoOrder()));
+
+            // 保存文件
+            String fileName = System.currentTimeMillis() + "_" + classVideoFile.getOriginalFilename();
+            String filePath = "/path/to/upload/directory/" + fileName;
+            File dest = new File(filePath);
+            classVideoFile.transferTo(dest);
+
+            // 设置视频文件路径到实体类
+            classC.setClassVideoPath(filePath);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error().message("课程新增失败");
+        }
+
+        classCService.saveClassC(classC);
+        return R.OK().data("提示", "新增课程成功");
+    }
+*/
+    /*相对路径
+    import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+
+@RestController
+@RequestMapping("/api/classC")
+public class ClassCController {
+
+    @Value("${upload.directory}")
+    private String uploadDirectory;
+
+    @PostMapping("/add")
+    public R add(@RequestPart("classCDto") ClassCDto classCDto, @RequestPart("classVideoFile") MultipartFile classVideoFile) {
+        if (classCDto == null || classVideoFile == null || classVideoFile.isEmpty()) {
+            return R.error().message("课程信息和视频文件不能为空");
+        }
+
+        // 检查文件类型
+        if (!classVideoFile.getContentType().equals("video/mp4")) {
+            return R.error().message("只允许上传MP4格式的视频");
+        }
+
+        ClassC classC = new ClassC();
+        try {
+            // 复制 DTO 属性到实体类
+            BeanUtils.copyProperties(classCDto, classC);
+            classC.setCompany(companyServiceImpl.getCompanyById(classCDto.getCompany_id()));
+            classC.setClassVideo(classVideoServiceImpl.getClassVideoByOrder(classCDto.getClassVideoOrder()));
+
+            // 创建上传目录（如果不存在）
+            File uploadDir = new File(uploadDirectory);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            // 保存文件
+            String fileName = System.currentTimeMillis() + "_" + classVideoFile.getOriginalFilename();
+            String filePath = uploadDirectory + File.separator + fileName;
+            File dest = new File(filePath);
+            classVideoFile.transferTo(dest);
+
+            // 设置视频文件路径到实体类
+            classC.setClassVideoPath(filePath);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return R.error().message("课程新增失败");
+        }
+
+        classCService.saveClassC(classC);
+        return R.OK().data("提示", "新增课程成功");
+    }
+}
+*/
+
     //删除
     @PostMapping("/delete")
     public R deleteItems(@RequestBody ListDto listDto) {
