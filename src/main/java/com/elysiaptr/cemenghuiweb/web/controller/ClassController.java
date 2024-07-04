@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -265,6 +266,22 @@ public class ClassController {
         } catch (IOException e) {
             return ResponseEntity.status(500).build();
         }
+    }
+    @GetMapping("/search_by_id")
+    public R searchClassById(@RequestParam(required = false) Long id) {
+
+        ClassC classC=classCService.getClassCById(id);
+        ClassCDto classCDto=new ClassCDto();
+        classCDto.setId(classC.getId());
+        classCDto.setName(classC.getName());
+        classCDto.setIntroduction(classC.getIntroduction());
+        classCDto.setImage(classC.getImage());
+        classCDto.setAuthor(classC.getAuthor());
+        classCDto.setCompany_id(classC.getCompany().getId());
+        classCDto.setClassVideoPath(classC.getClassVideo().getPath());
+        classCDto.setClassVideoOrder(classC.getClassVideo().getOrder());
+        classCDto.setClassVideoTitle(classC.getClassVideo().getTitle());
+        return R.OK().data("class", classCDto);
     }
 }
 

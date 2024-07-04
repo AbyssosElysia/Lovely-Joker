@@ -126,23 +126,10 @@ public class DepartmentController {
 
     //查all
     @GetMapping("/search_all")
-//    public R searchAllDepartment() {
-//        return R.OK();
-//    }
     public R searchAllDepartment(@RequestParam(required = true) Long companyId) {
         //获取公司的部门{
         Company company = companyService.getCompanyById(companyId);
         List<DepartmentDto> departments=new ArrayList<DepartmentDto>();
-       /* List<DepartmentDto> departmentDtos = departmentService.searchDepartmentByCompany(company).stream()
-                .map(department -> {
-                    DepartmentDto dto = new DepartmentDto();
-                    dto.setId(department.getId());
-                    dto.setName(department.getName());
-                    dto.setStatus(department.getStatus());
-                    return dto;
-                })
-                .collect(Collectors.toList());*/
-        // System.out.println( departmentService.searchDepartmentByCompany(company));
 
         for (Department department : departmentService.searchDepartmentByCompany(company)) {
             if (department.getFatherDept() == null) {
@@ -154,7 +141,40 @@ public class DepartmentController {
         }
         return R.OK().data("departmentList", departments);
     }
+    @GetMapping("/search_admin")
+    public R searchAll() {
+        List<Company> companyList = companyService.getAllCompanies();
+        List<DepartmentDto> departments = new ArrayList<DepartmentDto>();
+        for (Company company : companyList) {
+            List<DepartmentDto> departmentDtos = new ArrayList<>();
+            for (Department department : departmentService.searchDepartmentByCompany(company)) {
+                if (department.getFatherDept() == null) {
+                    Stack<DepartmentDto> departmentDtoStack = new Stack<>();
+                    DepartmentDto departmentDto = (DepartmentDto) departmentService.DFS(department, departmentDtoStack).get("department");
+                    departmentDtos.add(departmentDto);
+                }
+            }
+            departments.addAll(departmentDtos);
+        }
+        return R.OK().data("AllList", departments);
+    }
 
+
+
+    @GetMapping("/search_by_id")
+    public R searchDepartmentById(@RequestParam(required = false) Long id) {
+
+        Department department = departmentService.getDepartmentById(id);
+        DepartmentDto departmentDto=new DepartmentDto();
+        departmentDto.setStatus(department.getStatus());
+        departmentDto.setName(department.getName());
+        departmentDto.setId(department.getId());
+        departmentDto.setTime(department.getTime());
+        departmentDto.setEmail(department.getEmail());
+        departmentDto.setLeader(department.getManager());
+        departmentDto.setMobile(department.getMobile());
+        return R.OK().data("department", departmentDto);
+    }
 
 }
 

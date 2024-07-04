@@ -10,6 +10,7 @@ import com.elysiaptr.cemenghuiweb.web.service.MeetingService;
 import com.elysiaptr.cemenghuiweb.web.service.NewsService;
 import com.elysiaptr.cemenghuiweb.web.service.UserService;
 import com.elysiaptr.cemenghuiweb.web.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.time.Instant;
@@ -42,6 +45,7 @@ public class MeetingController {
     private ClassCService classCService;
 
     //新增
+    // 通过
     @PostMapping("/add")
     public R addMeeting(@RequestBody MeetingDto meetingDto) {
         if (meetingDto==null){
@@ -49,6 +53,8 @@ public class MeetingController {
         }
         Meeting meeting = new Meeting();
         BeanUtils.copyProperties(meetingDto, meeting);
+        meeting.setStartTime(Instant.parse(meetingDto.getStartTime()));
+        meeting.setEndTime(Instant.parse(meetingDto.getEndTime()));
         meeting.setHolder(userServiceImpl.getUserByUsername(meetingDto.getHolder()));
         meetingService.saveMeeting(meeting);
         return R.OK().data("提示", "新增会议成功");
@@ -72,14 +78,18 @@ public class MeetingController {
             return R.error().data("提示", "请选择需要删除的项目");
         }
     }
+    @GetMapping("/search_by_id")
+    public R searchMeetingById(@RequestParam(required = false) Long id) {
+        Meeting meeting = meetingService.getMeetingById(id);
+        MeetingDto meetingDto = new MeetingDto();
+        BeanUtils.copyProperties(meeting, meetingDto);
+        meetingDto.setStartTime(meeting.getStartTime().toString());
+        meetingDto.setEndTime(meeting.getEndTime().toString());
+        return R.OK().data("meeting", meetingDto);
+    }
     //修改
     @PostMapping("/update")
     public R updateMeeting(@RequestBody MeetingDto meetingDto) {
-       /* meeting.setName(meetingDto.getName());
-        meeting.setImage(meetingDto.getImage());
-        meeting.setContent(meetingDto.getContent());
-        meeting.setStartTime(meetingDto.getStartTime());
-        meeting.setEndTime(meetingDto.getEndTime());*/
         meetingService.updateMeeting(meetingDto.getId(),meetingDto);
         return R.OK().data("提示", "修改信息成功");
     }
@@ -114,8 +124,10 @@ public class MeetingController {
                     dto.setId(meeting.getId());
                     dto.setName(meeting.getName());
                     dto.setHolder(meeting.getHolder().getName());
-                    dto.setStartTime(meeting.getStartTime());
+                    /*dto.setStartTime(meeting.getStartTime());*/
+                    dto.setStartTime(meeting.getStartTime().toString());
                     return dto;
+
                 })
                 .collect(Collectors.toList());
 
@@ -135,7 +147,7 @@ public class MeetingController {
                     dto.setId(meeting.getId());
                     dto.setName(meeting.getName());
                     dto.setHolder(meeting.getHolder().getName());
-                    dto.setStartTime(meeting.getStartTime());
+                    dto.setStartTime(meeting.getStartTime().toString());
                     dto.setStatus(meeting.getStatus());
                     dto.setContent(meeting.getContent());
 
@@ -185,8 +197,8 @@ public class MeetingController {
             return ResponseEntity.status(500).build();
         }
     }*/
-    @PostMapping("/export")
-    public ResponseEntity<byte[]> exportMeetings(@RequestBody List<Long> meetingIds) {
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportMeetings(@RequestParam List<Long> meetingIds) {
         List<Meeting> meetingList = meetingService.getMeetingsByIds(meetingIds);
 
         // 将 Meeting 列表转换为 MeetingDto 列表
@@ -198,7 +210,8 @@ public class MeetingController {
                     dto.setStatus(meeting.getStatus());
                     dto.setHolder(meeting.getHolder().getName());
                     dto.setContent(meeting.getContent());
-                    dto.setStartTime(meeting.getStartTime());
+                    //*dto.setStartTime(meeting.getStartTime());*//*
+                    dto.setStartTime(meeting.getStartTime().toString());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -224,4 +237,35 @@ public class MeetingController {
             return ResponseEntity.status(500).build();
         }
     }
+   /* @GetMapping("/export")
+    public void exportMeetings(@RequestParam List<Long> meetingIds,@RequestParam HttpServletResponse response) throws IOException {
+        List<Meeting> meetingList = meetingService.getMeetingsByIds(meetingIds);
+
+        // 将 Meeting 列表转换为 MeetingDto 列表
+        List<MeetingDto> meetingDtos = meetingList.stream()
+                .map(meeting -> {
+                    MeetingDto dto = new MeetingDto();
+                    dto.setId(meeting.getId());
+                    dto.setName(meeting.getName());
+                    dto.setStatus(meeting.getStatus());
+                    dto.setHolder(meeting.getHolder().getName());
+                    dto.setContent(meeting.getContent());
+                    dto.setStartTime(meeting.getStartTime().toString());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String fileName = URLEncoder.encode("meetings", "UTF-8").replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+
+        try {
+            EasyExcel.write(response.getOutputStream(), MeetingDto.class).sheet("Meetings").doWrite(meetingDtos);
+        } catch (IOException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }*/
+
+
 }

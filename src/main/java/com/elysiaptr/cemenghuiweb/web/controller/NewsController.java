@@ -2,6 +2,7 @@ package com.elysiaptr.cemenghuiweb.web.controller;
 
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.*;
+import com.elysiaptr.cemenghuiweb.web.po.ClassC;
 import com.elysiaptr.cemenghuiweb.web.po.Company;
 import com.elysiaptr.cemenghuiweb.web.po.News;
 import com.elysiaptr.cemenghuiweb.web.repo.CompanyRepository;
@@ -130,6 +131,7 @@ public class NewsController {
                     dto.setTitle(news.getTitle());
                     dto.setAuthor(news.getAuthor());
                     dto.setIntroduction(news.getIntroduction());
+                    dto.setCompany_name(news.getCompany().getName());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -151,6 +153,7 @@ public class NewsController {
                     dto.setTitle(news.getTitle());
                     dto.setAuthor(news.getAuthor());
                     dto.setIntroduction(news.getIntroduction());
+                    dto.setCompany_name(news.getCompany().getName());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -175,6 +178,7 @@ public class NewsController {
                     dto.setContent(news.getContent());
                     dto.setCompany_id(news.getCompany().getId());
                     dto.setIntroduction(news.getIntroduction());
+                    dto.setCompany_name(news.getCompany().getName());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -225,6 +229,7 @@ public class NewsController {
                     dto.setImage(news.getImage());
                     dto.setContent(news.getContent());
                     dto.setCompany_id(news.getCompany().getId());
+                    dto.setCompany_name(news.getCompany().getName());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -245,6 +250,10 @@ public class NewsController {
                     dto.setTitle(news.getTitle());
                     dto.setAuthor(news.getAuthor());
                     dto.setIntroduction(news.getIntroduction());
+                    dto.setCompany_name(news.getCompany().getName());
+                    dto.setImage(news.getImage());
+                    dto.setContent(news.getContent());
+                    dto.setCompany_id(news.getCompany().getId());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -269,6 +278,23 @@ public class NewsController {
         } catch (IOException e) {
             return ResponseEntity.status(500).build();
         }
+    }
+    @GetMapping("/search_by_id")
+    public R searchNewsById(@RequestParam(required = false) Long id) {
+        News news = newsService.getNewsById(id);
+        NewsDto dto = new NewsDto();
+        dto.setId(news.getId());
+        dto.setTitle(news.getTitle());
+        dto.setAuthor(news.getAuthor());
+        dto.setIntroduction(news.getIntroduction());
+        dto.setImage(news.getImage());
+        dto.setContent(news.getContent());
+        dto.setCompany_id(news.getCompany().getId());
+        dto.setCompany_name(news.getCompany().getName());
+        dto.setAuthor(news.getAuthor());
+        dto.setIntroduction(news.getIntroduction());
+
+        return R.OK().data("news", dto);
     }
 
     

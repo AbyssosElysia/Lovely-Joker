@@ -9,6 +9,7 @@ import java.util.List;
 @Table(name = "post", schema = "CeMengHui")
 public class Post {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

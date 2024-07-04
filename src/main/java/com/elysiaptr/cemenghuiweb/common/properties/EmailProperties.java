@@ -1,7 +1,7 @@
 package com.elysiaptr.cemenghuiweb.common.properties;
 
 public interface EmailProperties {
-    String SENDER = "elysiaptr@qq.com";
-    String PASSWORD = "gllejkklwscgdjha";
+    String SENDER = "1950432070@qq.com";
+    String PASSWORD = "mlaiayowxwblbadg";
     String HOST = "smtp.qq.com";
 }

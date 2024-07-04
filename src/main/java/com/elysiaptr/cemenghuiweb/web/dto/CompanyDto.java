@@ -17,7 +17,7 @@ public class CompanyDto {
     private Long mobile;
     private String remark;
     private String adminName;//管理员
-    private Instant time;
+    private String time;
 
 
     private List<ClassC> classCS = new ArrayList<ClassC>();
@@ -84,13 +84,7 @@ public class CompanyDto {
         this.id = id;
     }
 
-    public Instant getTime() {
-        return time;
-    }
 
-    public void setTime(Instant time) {
-        this.time = time;
-    }
 
     public List<ClassC> getClassCS() {
         return classCS;
@@ -135,5 +129,13 @@ public class CompanyDto {
 
     public void setDepartments(List<DepartmentDto> departments) {
         this.departments = departments;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

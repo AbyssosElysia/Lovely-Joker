@@ -17,7 +17,7 @@ public class UserDto {
     private String remark;
     private String departmentName;
     private String postName;
-    private Instant time;
+    private String time;
     private int page;
     private int size;
 
@@ -126,13 +126,7 @@ public class UserDto {
         this.postName = postName;
     }
 
-    public Instant getTime() {
-        return time;
-    }
 
-    public void setTime(Instant time) {
-        this.time = time;
-    }
 
     public int getPage() {
         return page;
@@ -148,5 +142,13 @@ public class UserDto {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

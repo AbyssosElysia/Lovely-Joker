@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,10 +40,10 @@ public class MeetingServiceImpl implements MeetingService {
             meeting.setName(meetingDetails.getName());
         }
         if(meetingDetails.getStartTime()!=null){
-            meeting.setStartTime(meetingDetails.getStartTime());
+            meeting.setStartTime(Instant.parse(meetingDetails.getStartTime()));
         }
         if(meetingDetails.getEndTime()!=null){
-            meeting.setEndTime(meetingDetails.getEndTime());
+            meeting.setEndTime(Instant.parse(meetingDetails.getStartTime()));
         }
         if (meetingDetails.getImage()!=null){
             meeting.setImage(meetingDetails.getImage());

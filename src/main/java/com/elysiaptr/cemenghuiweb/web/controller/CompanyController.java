@@ -5,6 +5,7 @@ import com.elysiaptr.cemenghuiweb.web.dto.CompanyDto;
 import com.elysiaptr.cemenghuiweb.web.dto.ItemDto;
 import com.elysiaptr.cemenghuiweb.web.dto.ListDto;
 import com.elysiaptr.cemenghuiweb.web.dto.UserDto;
+import com.elysiaptr.cemenghuiweb.web.po.ClassC;
 import com.elysiaptr.cemenghuiweb.web.po.Company;
 import com.elysiaptr.cemenghuiweb.web.po.User;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
@@ -171,7 +172,7 @@ public class CompanyController {
                     dto.setRemark(company.getRemark());
                     dto.setLogo(company.getLogo());
                     Instant instant = Instant.now();
-                    dto.setTime(instant);
+                    dto.setTime(instant.toString());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -221,7 +222,7 @@ public class CompanyController {
                     dto.setRemark(company.getRemark());
                     dto.setLogo(company.getLogo());
                     Instant instant = Instant.now();
-                    dto.setTime(instant);
+                    dto.setTime(instant.toString());
                     dto.setContact(company.getContact());
                     return dto;
                 })
@@ -231,8 +232,8 @@ public class CompanyController {
 
         return R.OK().data("companyList", companyDtoPage);
     }
-    @PostMapping("/export")
-    public ResponseEntity<byte[]> exportCompanies(@RequestBody List<Long> companyIds) {
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportCompanies(@RequestParam List<Long> companyIds) {
         List<Company> companyList = companyService.getCompaniesByIds(companyIds);
 
         // 将 Company 列表转换为 CompanyExportDto 列表
@@ -244,7 +245,7 @@ public class CompanyController {
                     dto.setMobile(company.getMobile());
                     dto.setContact(company.getContact());
                     dto.setAdminName(company.getContact());
-                    dto.setTime(company.getTime());
+                    dto.setTime(company.getTime().toString());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -269,6 +270,22 @@ public class CompanyController {
         } catch (IOException e) {
             return ResponseEntity.status(500).build();
         }
+    }
+    @GetMapping("/search_by_id")
+    public R searchCompanyById(@RequestParam(required = false) Long id) {
+
+       Company company = companyService.getCompanyById(id);
+       CompanyDto companyDto = new CompanyDto();
+       companyDto.setId(company.getId());
+       companyDto.setName(company.getName());
+       companyDto.setMobile(company.getMobile());
+       companyDto.setContact(company.getContact());
+       companyDto.setAdminName(company.getContact());
+       companyDto.setTime(company.getTime().toString());
+       companyDto.setRemark(company.getRemark());
+       companyDto.setLogo(company.getLogo());
+
+        return R.OK().data("company", companyDto);
     }
 
 }

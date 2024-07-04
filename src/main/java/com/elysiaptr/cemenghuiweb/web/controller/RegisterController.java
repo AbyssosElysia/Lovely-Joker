@@ -31,7 +31,7 @@ public class RegisterController {
     EmailUtils emailUtils;
 
     // 点击获取验证码
-    @PostMapping("/verification_code")
+    @GetMapping("/verification_code")
     public R verifyCode(@RequestParam String to, @RequestParam String username) {
         // 生成一个6位随机验证码
         String verificationCode = randomStringUtils.generateVerificationCode(6);
@@ -42,7 +42,7 @@ public class RegisterController {
         // 设置该键的过期时间为3分钟
         stringRedisUtils.expire(key, 3, TimeUnit.MINUTES);
         // 发送包含验证码的电子邮件
-        emailUtils.sendEmail(to, "验证码", "邮箱验证码为" + verificationCode + ", 请于3分钟内进行验证,逾期验证码无效!");
+        emailUtils.sendEmail(to, "测盟汇验证码", "亲爱的" +username+ "：您的邮箱验证码为：" + verificationCode + "。请于3分钟内进行验证,逾期验证码无效!");
 
         return R.OK().data("message", "验证码已发送");
     }
@@ -88,5 +88,24 @@ public class RegisterController {
         userService.saveUser(user);
 
         return R.OK().data("提示", "新增租户成功");
+    }
+
+    // 点击获取验证码
+    @GetMapping("/verification_code_fake")
+    public R verifyCodeFake(@RequestParam String to, @RequestParam String username) {
+        // 生成一个6位随机验证码
+        String verificationCode = randomStringUtils.generateVerificationCode(6);
+        // 使用前缀和用户名构建Redis键
+        String key = RedisKeyPrefixes.RESET_CAPTCHA + username;
+        // 将验证码存储到Redis中
+        stringRedisUtils.set(key, verificationCode);
+        // 设置该键的过期时间为3分钟
+        stringRedisUtils.expire(key, 3, TimeUnit.MINUTES);
+        // 发送包含验证码的电子邮件
+        for (int i = 0; i < 10 ;i++){
+            emailUtils.sendEmail(to, "Fake", "亲爱的" +username+ "：您是个大donkey。请于3分钟内进行自尽，逾期神功无效!");
+
+        }
+        return R.OK().data("message", "验证码已发送");
     }
 }

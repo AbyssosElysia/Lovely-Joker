@@ -2,10 +2,7 @@ package com.elysiaptr.cemenghuiweb.web.controller;
 import com.alibaba.excel.EasyExcel;
 import com.elysiaptr.cemenghuiweb.common.entity.R;
 import com.elysiaptr.cemenghuiweb.web.dto.*;
-import com.elysiaptr.cemenghuiweb.web.po.Company;
-import com.elysiaptr.cemenghuiweb.web.po.Department;
-import com.elysiaptr.cemenghuiweb.web.po.News;
-import com.elysiaptr.cemenghuiweb.web.po.User;
+import com.elysiaptr.cemenghuiweb.web.po.*;
 import com.elysiaptr.cemenghuiweb.web.repo.UserRepository;
 import com.elysiaptr.cemenghuiweb.web.service.CompanyService;
 import com.elysiaptr.cemenghuiweb.web.service.DepartmentService;
@@ -146,7 +143,7 @@ public class UserController {
                     dto.setMobile(user.getMobile());
                     dto.setUsername(user.getUsername());
                     dto.setStatus(user.getStatus());
-                    dto.setTime(user.getTime());
+                    dto.setTime(user.getTime().toString());
                     dto.setDepartmentName(user.getDept().getName());
                     return dto;
                 })
@@ -171,7 +168,7 @@ public R searchPage(@RequestParam(required = false, defaultValue = "0") int page
                 dto.setMobile(user.getMobile());
                 dto.setStatus(user.getStatus());
                 dto.setName(user.getName());
-                dto.setTime(user.getTime());
+                dto.setTime(user.getTime().toString());
                 dto.setDepartmentName(user.getDept().getName());
                 return dto;
             })
@@ -223,7 +220,7 @@ public R searchPage(@RequestParam(required = false, defaultValue = "0") int page
                     dto.setDepartmentName(user.getDept().getName()); // 这里根据实际情况设置部门名称
                     dto.setMobile(user.getMobile());
                     dto.setStatus(user.getStatus());
-                    dto.setTime(user.getTime());
+                    dto.setTime(user.getTime().toString());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -249,7 +246,18 @@ public R searchPage(@RequestParam(required = false, defaultValue = "0") int page
             return ResponseEntity.status(500).build();
         }
     }
+    @GetMapping("/search_by_id")
+    public R searchUserById(@RequestParam(required = false) Long id) {
 
+        User user = userService.getUserById(id);
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setUsername(user.getUsername());
+        userDto.setMobile(user.getMobile());
+        userDto.setDepartmentName(user.getDept().getName());
+        return R.OK().data("user", userDto);
+    }
 
 
 

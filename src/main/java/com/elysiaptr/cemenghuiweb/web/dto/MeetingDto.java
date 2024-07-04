@@ -1,6 +1,7 @@
 package com.elysiaptr.cemenghuiweb.web.dto;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class MeetingDto {
     private Long id;
@@ -8,8 +9,18 @@ public class MeetingDto {
     private String content;
     private String image;
     private Byte status;
-    private Instant startTime;
-    private Instant endTime;
+    private String startTime; // 修改为 LocalDateTime
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    //    private Instant startTime;
+    private String endTime;
     private String holder;
 
     public Long getId() {
@@ -52,21 +63,15 @@ public class MeetingDto {
         this.status = status;
     }
 
-    public Instant getStartTime() {
+  /*  public Instant getStartTime() {
         return startTime;
     }
 
     public void setStartTime(Instant startTime) {
         this.startTime = startTime;
     }
+*/
 
-    public Instant getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Instant endTime) {
-        this.endTime = endTime;
-    }
 
     public String getHolder() {
         return holder;
@@ -74,5 +79,14 @@ public class MeetingDto {
 
     public void setHolder(String holder) {
         this.holder = holder;
+    }
+
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 }
